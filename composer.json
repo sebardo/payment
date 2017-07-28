@@ -15,7 +15,8 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "sebardo/admin": "dev-master"
+        "sebardo/admin": "dev-master",
+        "braintree/braintree_php": "*"
     },
     "autoload": {
         "psr-4": {"PaymentBundle\\": "PaymentBundle"}
