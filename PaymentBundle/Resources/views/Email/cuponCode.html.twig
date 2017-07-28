@@ -1,0 +1,31 @@
+{% block subject %}{{ 'cupon.code.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'cupon.code.email.greeting' | trans }},
+
+{{ 'cupon.code.email.message' | trans({ '%actor_name%': product.actor.name, '%order_number%': order_number, '%product%': product.name }) }}
+
+{{ 'cupon.code.email.code' | trans }}: {{ cupon_code }}
+
+{{ 'cupon.code.email.thanks' | trans }}.
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.code.email.greeting' | trans }},</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.code.email.message' | trans({ '%order_number%': order_number }) }}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">
+        <b>{{ 'cupon.code.email.code' | trans }}:</b> {{ cupon_code }}
+    </p>
+
+    <p style="padding:0;">{{ 'cupon.code.email.thanks' | trans }}.</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

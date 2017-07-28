@@ -1,0 +1,26 @@
+
+{% block subject %}{{ 'product.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'product.email.welcome' | trans({ '%app_name%': twig_global.getParameter('name') }) }}
+
+{{ 'product.email.message' | trans }}
+    
+{{ 'product.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'product.email.welcome' | trans({ '%app_name%': twig_global.getParameter('name') }) }}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'product.email.message' | trans }}</p>
+
+    <p style="padding:0; margin:0;">{{ 'product.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+{% form_theme form 'AdminBundle:Form:fields.html.twig' %}
+
+{% block section %}paymentserviceproviders{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "new.brand" | trans }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "sales" | trans }}</a></li>
+        <li><a href="{{ path('payment_paymentserviceprovider_index') }}">{{ "psp.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_paymentserviceprovider_new') }}">{{ "new.singular.2" | trans }}</a></li>
+      </ol>
+    </section>
+      
+      
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <!-- form start -->
+                {{ form_start(form, {
+                                    'action': path('payment_paymentserviceprovider_new'), 
+                                    'method': 'post', 
+                                    'attr': {'class': 'form-horizontal form-row-seperated'}
+                                    }) }}
+                    <div class="box-body">
+                        {{ include('PaymentBundle:PaymentServiceProvider:_form.html.twig', { form: form }) }}
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="ion-checkmark"></i> {{ "save" | trans }}</button>
+                            <a href="{{ path('payment_paymentserviceprovider_index') }}" class="btn btn-default btn-flat">{{ "cancel" | trans }}</a>
+                        </div>
+                    </div><!-- /.box-footer -->
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+         
+
+          
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        
+        function addTagFormDeleteLink($tagFormLi) {
+            var $removeFormA = $('<a class="btn btn-xs btn-flat btn-danger" href="#"><i class="ion-trash-a"></i> {{ 'psp.delete.credential' | trans  }}</a>');
+            $tagFormLi.append($removeFormA);
+
+            $removeFormA.on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // remove the li for the tag form
+                $tagFormLi.remove();
+            });
+        }
+
+        jQuery(document).ready(function() {
+            $('#delete-btn').on('click', function(e) {
+                e.preventDefault();
+
+                if (confirm('{{ "are.you.sure" | trans }}')) {
+                    $('#delete-entity').submit();
+                }
+            });
+            
+            // keep track of how many email fields have been rendered
+            var credentialCount = '{{ form.apiCredentialParameters|length }}';
+
+            jQuery('#add-another-credential').click(function(e) {
+                e.preventDefault();
+                $('#credentialModal').modal('show');
+            });
+
+            jQuery('#add-credential-label').click(function(e) {
+                e.preventDefault();
+                var label = $('#add-label').val();
+                var credentialList = jQuery('#credential-fields-list');
+
+                // grab the prototype template
+                var newWidget = credentialList.attr('data-prototype');
+                 // replace the "__name__" used in the id and name of the prototype
+                // with a label that's unique to your emails
+                // end name attribute looks like name="contact[emails][label]"
+                newWidget = newWidget.replace(/__name__/g, label);
+                credentialCount++;
+
+                // create a new list element and add it to the list
+                var newLi = jQuery('<li></li>').html('<label class="col-sm-2 control-label required">'+label+'</label><div class="col-sm-4">'+newWidget+'</div>');
+                newLi.appendTo(credentialList);
+                
+                var $removeFormA = $('<a class="btn btn-xs btn-flat btn-danger" href="#"><i class="ion-trash-a"></i> {{ 'psp.delete.credential' | trans  }}</a>');
+                newLi.append($removeFormA);
+                $removeFormA.on('click', function(e) {
+                    // prevent the link from creating a "#" on the URL
+                    e.preventDefault();
+
+                    // remove the li for the tag form
+                    newLi.remove();
+                });
+
+            });
+            
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('ul#credential-fields-list');
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('li').each(function() {
+                addTagFormDeleteLink($(this));
+            });
+
+            
+
+        });
+    </script>
+{% endblock %}
+ 

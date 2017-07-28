@@ -1,0 +1,17 @@
+<div class="payment-container-form" id="paypal">
+   <form method="post" action="{{ path('payment_checkout_summary') }}">
+        {{ form_rest(form) }}
+        
+        {{ include(template_from_string('<div class="col-sm-12 priceAndCheck">
+            <div class="price">
+               <span>{{ "checkout.amount" | trans }}:</span>
+               <strong>{{ totals.amount | price }}</strong>
+               <button >{{ "checkout.pay" | trans }}</button>
+            </div>
+            <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
+        </div>')) }}
+        
+        
+    </form>
+</div>
+

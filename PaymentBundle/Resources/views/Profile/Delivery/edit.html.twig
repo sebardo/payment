@@ -1,0 +1,15 @@
+{% if delivery_form is defined %}
+    {% set  form =  delivery_form %}
+{% else %}
+    {% set  form = get_delivery_form() %}    
+{% endif %}
+
+{{ form_start(delivery_form, {'action': path('payment_checkout_editdelivery', { id: address.id }), 'method': 'post', attr: {'class': 'form-horizontal delivery-form '} } ) }}
+    <div class="space-bottom">
+        {{ include('PaymentBundle:Profile:Delivery/_form.html.twig', { form: delivery_form }) }}
+    </div>
+    <div class="profile-buttons">
+        <a href="javascript:void(0);"  data="{{address.id}}" class=" btn btn-core delivery-edit-back"><i class="ion-reply"></i> <span>{{ 'back' | trans }}</span></a>
+        <button type="submit" class="btn btn-core pull-right delivery-submit"> <i class="ion-checkmark"></i> {{ 'save' | trans }}</button> 
+    </div>
+{{ form_end(delivery_form) }}

@@ -1,0 +1,9 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block body %}
+    
+    
+    {% include 'CoreBundle:Base:alert.messages.html.twig'%}						  
+
+
+{% endblock %}

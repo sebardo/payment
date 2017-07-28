@@ -1,0 +1,67 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+{% form_theme form 'AdminBundle:Form:fields.html.twig' %}
+
+{% block section %}categories{% endblock %}
+
+{% block content %}
+    
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "new.category" | trans }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "catalogue" | trans }}</a></li>
+        <li><a href="{{ path('payment_category_index') }}">{{ "category.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_category_new') }}">{{ "new.singular" | trans }}</a></li>
+      </ol>
+    </section>
+      
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-info">
+                <!-- form start -->
+                {{ form_start(form, {
+                                    'action': path('payment_category_new'), 
+                                    'method': 'post', 
+                                    'attr': {'class': 'form-horizontal form-row-seperated'}
+                                    }) }}
+                    <div class="box-body">
+                        {{ include('PaymentBundle:Category:_form.html.twig', { form: form }) }}
+                    </div><!-- /.box-body -->
+                    <div class="box-footer">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="ion-checkmark"></i> {{ "save" | trans }}</button>
+                            <a href="{{ path('payment_category_index') }}" class="btn btn-default btn-flat">{{ "cancel" | trans }}</a>
+                        </div>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+            $('#paymentbundle_categorytype_family').select2({
+                placeholder: "",
+                allowClear: true
+            });
+            $('#paymentbundle_categorytype_parentCategory').select2({
+                placeholder: "",
+                allowClear: true
+            });
+
+            
+        });
+    </script>
+{% endblock %}

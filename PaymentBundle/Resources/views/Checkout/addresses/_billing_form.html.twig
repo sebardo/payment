@@ -1,0 +1,47 @@
+<div class="row">
+    {% if form.contactPerson is defined %}
+        <div class="col-sm-4">
+            {{ form_row(form.contactPerson, { label: 'account.contact.person' }) }}
+        </div>
+    {% endif %}
+
+    <div class="col-sm-4">
+        {{ form_row(form.dni, { label: 'account.passport'}) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8">
+        {{ form_row(form.address, { label: 'account.address.singular' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.city, { label: 'account.city' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.state, { label: 'account.province.singular' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.postalCode, { label: 'account.postal.code' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.phone, { label: 'account.phone.singular' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.phone2, { label: 'account.phone.second' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.preferredSchedule, { label: 'account.chosen.schedule' }) }}
+    </div>
+</div>

@@ -1,0 +1,38 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block breadcrumb_inner %}
+    <li class="active"><a href="{{path('payment_checkout_creditcard')}}">Confirmación de pago</a></li>
+{% endblock %}
+
+
+{% block content %}
+
+     <div class="col-md-12 confirmation-payment">
+        <div class="col-md-12 col-xs-12" >
+            <div class="col-xs-12">
+                <h1 class="title">Confirmación de pago</h1>
+                
+                {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+                
+                <p>
+                    Estimado cliente, su pago se ha realizado correctamente, 
+                    {% if agreement_id is defined %}
+                        para su detalle ingrese al panel de administracion > Ecommerce > Recurrentes > Contratos   <br>
+                        <a href="{{ path('payment_contract_show', {id: agreement_id }) }}">Ver contrato</a>
+                    {% endif %}
+                    {% if url_invoice is defined %}
+                        <a href="{{ url_invoice }}">Ver factura</a>
+                    {% endif %}
+                </p>
+                
+                <p>Gracias por confiar en nosotros.</p> 
+            </div>
+        </div>
+    </div>
+     
+{% endblock %}
+    
+ 
+{% block javascripts %}
+        {{ parent() }}
+{% endblock %}

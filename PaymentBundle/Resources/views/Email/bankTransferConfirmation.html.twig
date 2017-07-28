@@ -1,0 +1,25 @@
+{% block subject %}{{ 'checkout.bank.transfer.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'checkout.bank.transfer.email.greeting' | trans }},
+
+{{ 'checkout.bank.transfer.email.message' | trans({ '%order_number%': order_number }) }}
+
+{{ 'checkout.bank.transfer.email.thanks' | trans }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'checkout.bank.transfer.email.greeting' | trans }},</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'checkout.bank.transfer.email.message' | trans({ '%order_number%': order_number }) }}</p>
+
+    <p style="padding:0; margin:0;">{{ 'checkout.bank.transfer.email.thanks' | trans }}</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

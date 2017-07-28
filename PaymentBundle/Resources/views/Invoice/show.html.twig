@@ -1,0 +1,200 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}invoices{% endblock %}
+
+{% block content %}
+    
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "invoice.singular" | trans }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "transaction.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_invoice_index') }}">{{ "invoice.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_invoice_show', { id: entity.id }) }}">#{{ entity.invoiceNumber }}</a></li>
+      </ol>
+    </section>
+      
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            <div class="clearfix" style="margin-bottom: 10px;">
+                <div class="btn-group">
+                    <a href="?download=true" target="_blank" class="btn btn-success btn-flat">
+                        Exportar factura a PDF
+                    </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="box-body show-tables">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>{{ "invoice.singular" | trans }}</td>
+                            <td>{{ entity.invoiceNumber }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "date" | trans }}</td>
+                            <td>{{ entity.created.format('d/m/Y') }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "transaction.singular" | trans }}</td>
+                            <td><a href="{{ path('payment_transaction_show', { id: entity.transaction.id }) }}">#{{ entity.transaction.transactionKey }}</a></td>
+                        </tr>
+                        <tr>
+                            <td>{{ "user.singular" | trans }}</td>
+                            <td>
+                                <a href="{{ path('core_actor_show', { id: entity.transaction.actor.id }) }}">{{ entity.transaction.actor.name }}</a>
+                            </td>
+                        </tr>
+                        {% if entity.dni != ''%}
+                            <tr>
+                                <td>DNI</td>
+                                <td>{{ entity.dni }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ "address.singular" | trans }}</td>
+                            <td>
+                                {{ entity.fullName }}<br />
+                                {{ entity.address }}<br />
+                                {{ entity.postalCode }} {{ entity.city }}<br />
+                                {% if entity.provinces is defined %}{{ entity.provinces[entity.province] }}{% endif %} -
+                                {% if entity.countries is defined %}{{ entity.countries[entity.country] }}{% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ "items" | trans }}</td>
+                            <td class="transaction-show-tables">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        {% if entity.transaction.items.product.plan.id is defined %}
+                                            <th>{{ "product.singular" | trans }}</th>
+                                            <th>{{ "quantity" | trans }}</th>
+                                            <th>{{ "price" | trans }}</th>
+                                            <th>{{ "total.singular" | trans }}</th>
+                                            <th>{{ "returned" | trans }}</th>
+                                        {% elseif (entity.transaction.items.first.plan.id is defined) %}
+                                            <th>{{ "product.singular" | trans }}</th>
+                                            <th>{{ "pay.number" | trans }}</th>
+                                            <th>{{ "total.singular" | trans }}</th>
+                                        {% elseif (entity.transaction.items.first.advert.id is defined) %}
+                                            <th>{{ "product.singular" | trans }}</th>
+                                            <th>{{ "quantity" | trans }}</th>
+                                            <th>{{ "price" | trans }}</th>
+                                            <th>{{ "total.singular" | trans }}</th>
+                                        {% endif %}
+                                    </tr>
+                                    
+                                    </thead>
+                                    <tbody>
+                                    {% for item in entity.transaction.items %}
+                                        {% if (item.product.id is defined) %}
+                                            <tr>
+                                                <td><a href="{{ path('fontcatalogue_typography_show', { id: item.product.id }) }}">{{ item.product.name }}</a></td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>{{ item.product.price | prices(item.product.priceType) }}</td>
+                                                <td>{{ (item.product.price * item.quantity) | prices(item.product.priceType) }}</td>
+                                                <td>
+                                                    {% if item.returned %}
+                                                        <span class="label label-important">{{ "yes" | trans }}</span>
+                                                    {% else %}
+                                                        <span class="label label-success">{{ "no" | trans }}</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% elseif (item.plan.id is defined) %}
+                                            <tr>
+                                                <td style="text-align: left"><a href="{{ path('payment_plan_show', { id: item.plan.id }) }}">{{ item.plan.name }}</a></td>
+                                                <td>
+                                                {% if entity.agreement.id is defined %}
+                                                    {% for transaction in entity.agreement.transactions %}
+                                                        {% if transaction.id == entity.id %}{{loop.index}} de {{entity.agreement.plan.cycles}}{% endif %}
+                                                    {% endfor %}
+                                                {% endif %}
+                                                </td>
+                                                <td>{{ (item.totalPrice * item.quantity) | prices(0) }}</td>
+                                            </tr>
+                                        {% elseif (item.advert.id is defined) %}
+                                            <tr>
+                                                <td style="text-align: left"><a href="{{ path('payment_advert_show', { id: item.advert.id }) }}">{{ item.advert.title }}</a></td>
+                                                <td>{{ item.quantity }}</td>
+                                                <td>{{ item.basePrice }}</td>
+                                                <td>{{ (item.BasePrice * item.quantity) | prices(0) }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <tr>
+                                        <td>{{ "total.sub" | trans }}</td>
+                                        <td></td>
+                                        {% if (entity.transaction.items.first.product.id is defined) or (entity.transaction.items.first.advert.id is defined) %}<td></td>{% endif %}
+                                        <td><b>{{ (entity.transaction.totalPrice+entity.transaction.tax) | price }}</b></td>
+                                        {% if entity.transaction.items.first.product.id is  defined %}<td></td>{% endif %}
+                                    </tr>
+                                    {% if entity.transaction.items.first.product.id is defined %}
+                                        <tr>
+                                            <td>{{ "expenses" | trans }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ totals.delivery_expenses | price }}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ entity.transaction.vat }}% {{ "vat" | trans }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ totals.vat | price }}</td>
+                                            <td></td>
+                                        </tr>
+                                    {% elseif entity.transaction.items.first.advert.id is defined %}
+                                        <tr>
+                                            <td>{{ entity.transaction.vat }}% {{ "vat" | trans }}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{ totals.vat | price }}</td>
+                                            <td></td>
+                                        </tr>
+                                    {% elseif entity.transaction.items.first.plan.id is defined %}
+                                         <tr>
+                                            <td>{{ "tax.singular" | trans }}</td>
+                                            <td></td>
+                                            <td>{{ entity.transaction.tax | price }}</td>
+                                        </tr>
+                                    {% endif %}
+                                    
+                                    <tr>
+                                        <td>{{ "total.singular" | trans }}</td>
+                                        <td></td>
+                                        {% if entity.transaction.agreement.id is not defined %}<td></td>{% endif %}
+                                        <td><b>{{ totals.amount | price }}</b></td>
+                                        {% if entity.transaction.agreement.id is not defined %}<td></td>{% endif %}
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+                            
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block breadcrumb %}
+    
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="#">Inicio</a></li>
+            <li class="active"><a href="#">{{ 'invoice.singular'| trans }} </a></li>
+        </ol>
+    </div>
+     
+{% endblock %}
+
+{% block content %}
+     <div class="login-container-content">
+        <div class="container">
+            <div class="row core-row invoice">
+                
+           
+                {% block content_header %}
+                     
+                        <div class="col-md-6 col-xs-4">
+                            <h1 class="title">
+                                FACTURA
+                            </h1>
+                         <div class="subtitle-section">Puedes ver tu factura.</div> 
+                        </div>
+                        
+                        <div class="col-md-6 col-xs-8">
+                            {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'invoice'}  %}
+                        </div>
+                    
+                 {% endblock %}
+                 
+                 <div style="clear: both"></div>
+                 
+                 {% block content_body %}
+                    <div id="alert-detail" class="col-md-12">
+                        {% include 'CoreBundle:Base:alert.messages.html.twig'%}
+                    </div>
+                    <div id="invoice">
+                        <div class="col-md-12 container-content">
+                            <div class="container-bill">
+                                {{ include('PaymentBundle:Profile:Invoice/_bill.html.twig') }}
+                            </div>
+                        </div>
+                        <div class="col-md-1"></div>      
+                        <div class="col-md-10">        
+                            <div class="bill-buttons">
+                                <a class="btn" href="{{ path('payment_checkout_showinvoice', { number: invoice.invoiceNumber, download: 'true' }) }}">
+                                    {{ "invoice.download.pdf" | trans }}
+                                </a>
+                                <a class="btn" href="{{ path('core_actor_index') }}?transactions=1">{{ "transaction.view" | trans }}</a>
+                            </div>
+                        </div> 
+                        <div class="col-md-1"></div>      
+                    </div>
+                 {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}    

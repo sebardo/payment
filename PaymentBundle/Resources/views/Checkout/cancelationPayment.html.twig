@@ -1,0 +1,30 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block breadcrumb_inner %}
+    <li class="active"><a href="{{path('payment_checkout_creditcard')}}">Confirmación de pago</a></li>
+{% endblock %}
+
+{% block content %}
+     <div class="col-md-12 cc-content">
+        <div class="col-md-3 hidden-xs"></div>
+        <div class="col-md-6 col-xs-12" >
+            <div class="col-xs-12">
+                <h1 class="title">Confirmación de pago</h1>
+                <p>
+                    Estimado cliente, su pago no se ha realizado. Contacte con nosotros para mas información.
+                </p>
+                <p>Gracias por confiar en nosotros.</p> 
+            </div>
+        </div>
+        <div class="col-md-3" ></div>
+    </div>
+     
+{% endblock %}
+    
+ 
+{% block javascripts %}
+        {{ parent() }}
+{% endblock %}
+
+    
+    

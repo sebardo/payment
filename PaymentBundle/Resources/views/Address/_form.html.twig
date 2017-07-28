@@ -1,0 +1,90 @@
+{{ form_errors(form) }}
+
+<div class="col-md-5">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.address.singular' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.address, { 'label' : 'account.address.singular', 'attr': {'class': 'form-control', 'placeholder':  'account.address.singular' | trans  } } ) }}
+            {{ form_errors(form.address) }}
+        </div>
+    </div>
+</div>  
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.passport' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.dni, { 'label' : 'account.passport', 'attr': {'class': 'form-control', 'placeholder':  'account.passport' | trans  } } ) }}
+            {{ form_errors(form.dni) }}
+        </div>
+    </div>
+</div>  
+<div class="col-md-3">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.postal.code' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.postalCode, { 'label' : 'account.postal.code', 'attr': {'class': 'form-control', 'placeholder': 'account.postal.code' | trans  } } ) }}
+            {{ form_errors(form.postalCode) }}
+        </div>
+    </div>    
+</div>  
+        
+        
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.phone.singular' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.phone, { 'label' : 'account.phone.singular', 'attr': {'class': 'form-control', 'placeholder':  'account.phone.singular' | trans  } } ) }}
+            {{ form_errors(form.phone) }}
+        </div>
+    </div>
+</div>  
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.phone.second' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.phone2, { 'label' : 'account.phone.second', 'attr': {'class': 'form-control', 'placeholder': 'account.phone.second' | trans  } } ) }}
+            {{ form_errors(form.phone2) }}
+        </div>
+    </div>    
+</div>                   
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.chosen.schedule' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.preferredSchedule, { 'label' : 'account.chosen.schedule', 'attr': {'class': 'form-control', 'placeholder':  'account.chosen.schedule' | trans  } } ) }}
+            {{ form_errors(form.preferredSchedule) }}
+        </div>
+    </div>
+</div>  
+        
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.city' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.city, { 'label' : 'account.city', 'attr': {'class': 'form-control', 'placeholder': 'account.city' | trans  } } ) }}
+            {{ form_errors(form.city) }}
+        </div>
+    </div>    
+</div> 
+           
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.province.singular' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.state, { 'label' : 'account.province.singular', 'attr': {'class': 'form-control', 'placeholder':  'account.province.singular' | trans  } } ) }}
+            {{ form_errors(form.state) }}
+        </div>
+    </div>
+</div>  
+<div class="col-md-4">
+    <div class="form-group">
+        <label class="control-label">{{ 'account.city' | trans }}</label>
+        <div class="">
+            {{ form_widget(form.country, { 'label' : 'account.country.singular', 'attr': {'class': 'form-control', 'placeholder': 'account.country.singular' | trans  } } ) }}
+            {{ form_errors(form.country) }}
+        </div>
+    </div>    
+</div> 
+             
+
+{{ form_rest(form) }}

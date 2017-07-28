@@ -1,0 +1,116 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}carts{% endblock %}
+
+{% block content %}
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="page-title">
+                    {{ "cart.singular" | trans }} #{{ entity.id }}
+                </h3>
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="icon-home"></i>
+                        <a href="{{ path('kitchenit_admin_default_index') }}">{{ "home" | trans }}</a>
+                        <i class="icon-angle-right"></i>
+                        <a href="javascript:">{{ "catalogue" | trans }}</a>
+                        <i class="icon-angle-right"></i>
+                        <a href="{{ path('kitchenit_admin_cart_index') }}">{{ "cart.plural" | trans }}</a>
+                        <i class="icon-angle-right"></i>
+                    </li>
+                    <li><a href="{{ path('kitchenit_admin_cart_show', { id: entity.id }) }}">#{{ entity.id }}</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid profile">
+            <div class="span12">
+                <div class="tabbable tabbable-custom boxless custom-border">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#info_tab" data-toggle="tab">{{ "information" | trans }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="info_tab">
+                            <div class="portlet box custom">
+                                <div class="portlet-body profile">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ "cart.singular" | trans }}</td>
+                                            <td>{{ entity.id }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "locked" | trans }}</td>
+                                            <td>
+                                                {% if entity.locked %}
+                                                    <span class="label label-important">{{ "yes" | trans }}</span>
+                                                {% else %}
+                                                    <span class="label label-success">{{ "no" | trans }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "items" | trans }}</td>
+                                            <td>
+                                                <table class="table table-bordered table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>{{ "product.singular" | trans }}</th>
+                                                        <th>{{ "quantity" | trans }}</th>
+                                                        <th>{{ "price" | trans }}</th>
+                                                        <th>{{ "total.singular" | trans }}</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for item in entity.items %}
+                                                        <tr>
+                                                            <td>{{ item.id }}</td>
+                                                            <td><a href="{{ path('kitchenit_admin_product_show', { id: item.product.id }) }}">{{ item.product.name }}</a></td>
+                                                            <td>{{ item.quantity }}</td>
+                                                            <td>{{ item.unitPrice | price }}</td>
+                                                            <td>{{ item.total | price }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    <tr>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td><b>{{ entity.total | price }}</b></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--END TABS-->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END PAGE CONTAINER-->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+            App.init();
+        });
+    </script>
+{% endblock %}

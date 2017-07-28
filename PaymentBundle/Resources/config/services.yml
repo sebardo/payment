@@ -1,0 +1,57 @@
+parameters:
+  braintree.factory.class: PaymentBundle\Factory\BraintreeFactory
+  paypal.factory.class: PaymentBundle\Factory\PayPalFactory
+  redsys.factory.class: PaymentBundle\Factory\RedsysFactory
+
+services:
+    dynamic_relation_map_payment.listener.doctrine_event_listener:
+        class: "PaymentBundle\\EventListener\\DynamicRelationSubscriber"
+        arguments: ["%core.dynamic_discriminator_map.mapping%"]
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }
+             
+    payment_manager:
+        class: PaymentBundle\Service\PaymentManager
+        calls:
+            - [setContainer, ["@service_container"] ]
+            
+    checkout_manager:
+        class: PaymentBundle\Service\CheckoutManager
+        arguments:
+            - "@session"
+            - "@doctrine.orm.entity_manager"
+            - "@cart_provider"
+            - "@security.token_storage"
+            - "@router"
+            - "@kernel"
+            - "@core.mailer"
+            - "%core.special_percentage_charge%"
+            - "%core.delivery_expenses_type%"
+            - "%core.delivery_expenses_percentage%"
+            - "%core.vat%"
+            - "@payment_manager"
+    cart_provider:
+        class: PaymentBundle\Service\CartProvider
+        arguments:
+            - "@cart_storage"
+            - "@doctrine.orm.entity_manager"
+  
+    cart_storage:
+        class: PaymentBundle\Service\CartStorage
+        arguments:
+            - "@session"
+    payment_extension:
+        class: PaymentBundle\Twig\PaymentExtension
+        arguments:
+            - { parameters: %core% }
+        calls:
+            - [setContainer, ["@service_container"] ]
+        tags:
+            - { name: twig.extension }
+            
+    payment_extension_string:
+        class: Twig_Extension_StringLoader
+        tags:
+            - { name: 'twig.extension' }
+ 
+     

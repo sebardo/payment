@@ -1,0 +1,25 @@
+{% block subject %}{{ 'cupon.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'cupon.actor.greeting' | trans({ '%actor_name%' : actor.name }) }},
+
+{{ 'cupon.actor.message' | trans({ '%product_link%' : '<a href="'~path('front_product_show', { slug: product.slug })~'">'~product.name~'</a>' ,  '%email%' : user.email }) | raw }}
+
+{{ 'cupon.actor.thanks' | trans }}.
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.actor.greeting' | trans({ '%actor_name%' : actor.name }) }},</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.actor.message' | trans({ '%product_link%' : '<a href="'~product_url~'">'~product.name~'</a>' ,  '%email%' : user.email })  | raw }}</p>
+
+    <p style="padding:0;">{{ 'cupon.actor.thanks' | trans }}.</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

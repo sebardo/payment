@@ -1,0 +1,24 @@
+<div class="payment-container-form" id="braintree">
+    {{ form_start(form, {'attr': {'action': '/summary' } } ) }}
+        {{ form_errors(form) }}
+        
+        {{ include(template_from_string('<section>
+            <div class="bt-drop-in-wrapper">
+                <div id="bt-dropin"></div>
+            </div>
+
+            <label for="amount">
+                <span class="input-label">Amount</span>
+                <div class="input-wrapper amount-wrapper">
+                    <input id="amount" name="amount" type="tel" min="1" placeholder="Amount" value="10">
+                </div>
+            </label>
+        </section>
+        <button class="btn btn-primary" type="submit"><span>Test Transaction</span></button>')) }}
+        {#{ include(template_from_string(page.template)) }#}
+
+        
+     {{ form_end(form) }}
+</div>
+ 
+ 

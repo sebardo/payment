@@ -1,0 +1,34 @@
+{% block subject %}{{ 'advert.email.subject' | trans({ '%app_name%': twig_global.getParameter('name'), '%order_number%': order_number }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'advert.email.congratulations' | trans({ '%user_name%': user.name }) | raw }} 
+
+{{ 'advert.email.message'| trans({'%advert_name%': advert.title}) }}
+
+Publicidad adquirida: {{ advert.title }}
+
+{{ 'advert.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'advert.email.congratulations' | trans({ '%user_name%': user.name }) | raw}}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'advert.email.message'| trans({ '%advert_name%': advert.title}) }}</p>
+    
+    <p style="padding:0 0 20px 0; margin:0;overflow: hidden;">
+            Publicidad adquirida: {{ advert.title }}
+    </p>             
+    
+  
+
+    <p style="padding:0; margin:0;">{{ 'advert.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

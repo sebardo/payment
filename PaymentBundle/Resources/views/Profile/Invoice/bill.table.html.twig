@@ -1,0 +1,44 @@
+ <table>
+    <tr>
+        <th class="center">{{ "invoice.reference" | trans }}</th>
+        <th>{{ "invoice.description" | trans }}</th>
+        <th class="center">{{ "checkout.units" | trans }}</th>
+        <th class="center">{{ "checkout.rrp.unit" | trans }}</th>
+        <th class="center">{{ "checkout.rrp.total" | trans }}</th>
+    </tr>
+
+    {% for item in invoice.transaction.items %}
+        {% if item.product.id is defined %}
+        <tr>
+            <td>{{ item.product.reference }}</td>
+            <td>{{ item.product.name }}</td>
+            <td class="center">{{ item.quantity }}</td>
+            <td class="center">{{ item.product.price | price(true) }}</td>
+            <td class="center"><strong>{{ (item.product.price * item.quantity) | price }}</strong></td>
+        </tr>
+        {% endif %}
+        {% if item.plan.id is defined %}
+        <tr>
+            <td>{{ item.plan.id }}</td>
+            <td>{{ item.plan.name }}</td>
+            <td class="center">{{ item.quantity }}</td>
+            <td class="center">{{ item.plan.amount | price(true) }}</td>
+            <td class="center"><strong>{{ (item.plan.amount * item.quantity) | price }}</strong></td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td>{{ "checkout.delivery.costs" | trans }}</td>
+        <td></td>
+        <td></td>
+        <td class="center"> <strong> + {{ totals.delivery_expenses | price }}</strong> </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>{{ "vat" | trans }} ({{ invoice.transaction.vat }}%)</td>
+        <td></td>
+        <td></td>
+        <td class="center"><strong>+ {{ totals.vat | price }}</strong></td>
+    </tr>
+</table>

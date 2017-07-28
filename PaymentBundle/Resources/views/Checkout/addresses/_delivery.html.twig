@@ -1,0 +1,6 @@
+{{ delivery.fullName }}<br />
+{{ delivery.deliveryContactPerson is not null ? (delivery.deliveryContactPerson ~ '<br />') | raw }}
+{{ delivery.deliveryDni }}<br />
+{{ delivery.deliveryAddress }}<br />
+{{ delivery.deliveryPostalCode }} {{ delivery.deliveryCity }}<br />
+{{ delivery.state }}, {{ delivery.country.name }}

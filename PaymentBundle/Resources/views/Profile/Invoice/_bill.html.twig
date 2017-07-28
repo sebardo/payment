@@ -1,0 +1,69 @@
+<div class="bill">
+    <div class="col-md-1"></div>
+     
+        <div class="col-md-10">
+      
+        <div >
+            <div class="col-md-4 col-sm-5 col-xs-12">
+                <div class="container-logo-invoice">
+                    <img src="{{twig_global.getParameter('server_base_url')}}{{ asset('bundles/front/images/logo.png') }}" width="250px" alt="logo" />
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-7">
+                <div id="bill-info">
+                    <span>{{ "transaction.number" | trans }}: <strong>{{ invoice.transaction.transactionKey }}</strong></span><br>
+                    <span>{{ "checkout.date" | trans }}: {{ invoice.created | date("d/m/Y") }}</span>
+                </div>
+            </div>
+            <div class="space" style="clear: both"></div>
+            <div class="col-md-6 address">
+                <h3>{{ "checkout.customer.info" | trans }}</h3>
+                <p>{{ include('PaymentBundle:Checkout:addresses/_billing.html.twig') }}</p>
+            </div>
+
+            <div class="col-md-6 address">
+                <h3>{{ "checkout.business.info" | trans }}</h3>
+                <p>
+                    {{ twig_global.getParameter("name") }}<br />
+                    {{ twig_global.getParameter("address") }}<br />
+                    {{ twig_global.getParameter("postal_code") }} {{ twig_global.getParameter("city") }}<br />
+
+                    {{ twig_global.getParameter("server_base_url") }}
+                </p>
+            </div>
+        </div>
+        <div style="clear: both"></div>
+        <div class="container-table-invoice">
+            
+                {% include 'PaymentBundle:Profile/Invoice:bill.table.html.twig'%}
+            
+            <div class="total">
+                <span>{{ "total" | trans }}</span>
+                <strong>{{ totals.amount | price }}</strong>
+            </div>
+        </div>
+        
+                        
+
+        
+
+        <div class="obs">
+            <span>{{ "invoice.notes" | trans }}</span>
+            <p>
+                {% if 'credit_card' == invoice.transaction.paymentMethod %}
+                    {{ "invoice.payment.by.credit.card" | trans }}
+                {% elseif 'bank_transfer' == invoice.transaction.paymentMethod %}
+                    {{ "invoice.payment.by.bank.transfer" | trans }}
+                {% endif %}
+            </p>
+        </div>
+
+        <p class="bil-footer">
+             
+                {{ twig_global.getParameter("admin_email")  }}
+                <span>|</span>{{ twig_global.getParameter("server_base_url") }}
+            
+        </p>
+    </div>
+    <div class="col-md-1"></div>
+</div>

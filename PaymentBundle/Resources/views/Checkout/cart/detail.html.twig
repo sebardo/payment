@@ -1,0 +1,145 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block breadcrumb %}
+   
+    <div class="col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li ><a href="/">Inicio</a></li>
+            <li class="active"><a href="{{path('payment_checkout_detail')}}">Carrito</a></li>
+        </ol>
+    </div>
+       
+{% endblock %}
+    
+{% block content %}
+    
+    <div class="container container-padding cart-detail">
+        {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'cart'}  %}
+
+        {% set cart = cart_get() %}
+        <div id="cart-detail">
+            <div class="col-md-1"></div>
+                <div class="col-md-10 col-xs-12 container-content">
+                    {% if cart.totalItems > 0%}
+                        {{ form_errors(form) }}
+
+                        <div class="container-table-cart">
+                            {{ form_start(form, {
+                                        'action': path('payment_checkout_save'), 
+                                        'method': 'post'
+                                        }) }}
+                                {% include 'PaymentBundle:Checkout/cart:table.detail.html.twig' %}
+                                {{ form_rest(form) }}
+                            {{ form_end(form) }} 
+                        </div>
+                    {% else %}
+                        <div style="margin-bottom: 100px;margin-top: 50px">
+                            <div class="alert alert-warning">Su carrito esta vacio, hasta el momento no ha seleccionado ningun producto.</div> 
+                        </div>
+                    {% endif %}
+                </div>
+            <div class="col-md-1"></div>
+        </div> 
+    </div>
+       
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+            'bundles/payment/less/step-snipet.less'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+        {{ parent() }}
+         
+
+        <script>
+            var gastos_envio=0;
+            var total=0;
+            var articulos=0;
+
+            jQuery(document).ready(function(){
+                    {% if app.user %}
+                        jQuery('[type=radio]').change(function(){
+                                calcularCompra();
+                        });
+                    {% endif %} 
+                        jQuery('.quantity').blur(function(){
+                                calcularCompra();
+                        });
+                        calcularCompra();
+                });
+
+            function in_array(array, ids) {
+                for(var i=0;i<array.length;i++) {
+                    return (array[i].id === ids);
+                }
+                return false;
+            }
+
+            //var result = in_array(ArrayofPeople, 235);
+
+            function calcularCompra(){
+                    gastos_envio=0;
+                    free_transport=0;
+                    total=0;
+                    articulos=0;
+                    var arr = [];
+                    jQuery('[type=radio]:checked').each(function(){
+                            var price = jQuery(this).attr('price');
+                            var actorId = jQuery(this).attr('actor');
+                            var isFreeTransport = jQuery(this).attr('isFreeTransport');
+                            if (typeof(price) != "undefined" && jQuery(this).val()=="0"){
+                                if(!in_array(arr, actorId)){
+                                    var obj = {"id": actorId};
+                                    arr.push(obj);
+                                    gastos_envio += parseFloat(price);
+                                    console.log(isFreeTransport);
+                                    if(isFreeTransport==1){
+                                        free_transport += parseFloat(price);
+                                    }
+                                    console.log(free_transport);
+                                }
+                            }
+                            
+                            //update shipping cost
+                            var parent = $(this).parent();
+                            parent.find('.shipping-cost').val(price);
+
+                            /*if(jQuery(this).val()=='0'){
+                                var precio = jQuery(this).attr('precio');
+                                  gastos_envio+=parseFloat(precio);
+                            }*/
+                    });
+
+                    jQuery('[data-price]').each(function(){
+                            var data_precio = jQuery(this).attr('data-price')
+                            var precio = data_precio.replace(",", ".");
+
+                            if( isNaN(jQuery(this).val()))
+                                    jQuery(this).val(1);
+
+                            jQuery(this).val();
+                            articulos+=parseInt(jQuery(this).val());
+
+                            total+=jQuery(this).val()*precio;
+                            //console.log(total);
+                    });
+
+                    var tot = total+gastos_envio-free_transport;
+
+                    jQuery('#gastos_envio').html(gastos_envio+'&euro;');
+                    jQuery('#free_transport').html(free_transport+'&euro;');
+                    jQuery('#total').html(tot.toFixed(2)+'&euro;');
+                    jQuery('#articulos').html(articulos);
+
+            }
+        </script>
+
+     
+{% endblock %}
+ 

@@ -1,0 +1,34 @@
+{% block subject %}{{ 'carrier.tracking.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'carrier.tracking.email.greeting' | trans }},
+
+{{ 'carrier.tracking.email.message' | trans({ '%order_number%': order_number }) }}
+
+{{ 'carrier.tracking.email.code' | trans }}: {{ tracking_code }}
+
+{{ 'carrier.tracking.email.carrier.web' | trans({ '%carrier_name%': carrier_name }) }}
+
+{{ 'carrier.tracking.email.thanks' | trans }}.
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'carrier.tracking.email.greeting' | trans }},</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'carrier.tracking.email.message' | trans({ '%order_number%': order_number }) }}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">
+        <b>{{ 'carrier.tracking.email.code' | trans }}:</b> {{ tracking_code }}
+    </p>
+
+
+    <p style="padding:0;">{{ 'carrier.tracking.email.thanks' | trans }}.</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

@@ -1,0 +1,165 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}transactions{% endblock %}
+
+{% block content %}
+    
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "transaction.plural" | trans }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "transaction.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_transaction_index') }}">{{ "transaction.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_transaction_show', { id: entity.id }) }}">#{{ entity.transactionKey }}</a></li>
+      </ol>
+    </section>
+      
+      
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+               {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+            <div class="box">
+                <div class="box-body show-tables">
+                    <table class="table">
+                    <tbody>
+                    <tr>
+                        <td>{{ "transaction.singular" | trans }}</td>
+                        <td>
+                            {{ entity.transactionKey }} 
+                            
+                            <a style="cursor: pointer;margin-left: 10px;font-size: 12px" data-toggle="modal" data-target="#myModal">
+                            ver detalle
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>{{ "date" | trans }}</td>
+                        <td>{{ entity.created.format('d/m/Y h:i') }}</td>
+                    </tr>
+                    
+                    <tr>
+                        <td>{{ "status.singular" | trans }}</td>
+                        <td>
+                            {% include ('PaymentBundle:Transaction:status.html.twig')%}
+                        </td>
+                    </tr>
+                    {% if entity.invoice is not null %}
+                        <tr>
+                            <td>{{ "invoice.singular" | trans }}</td>
+                            <td><a href="{{ path('payment_invoice_show', { id: entity.invoice.id }) }}">#{{ entity.invoice.invoiceNumber }}</a></td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>{{ "user.singular" | trans }}</td>
+                        <td>
+                            <a href="{{ path('core_actor_show', { id: entity.actor.id }) }}">{{ entity.actor.fullName }}</a>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ "transaction.payment.method" | trans }}</td>
+                        <td>
+                            {{ entity.paymentMethod.name | trans }}
+                        </td>
+                    </tr>
+                    
+                    {% if entity.delivery is not null%}
+                        
+                        <tr>
+                            <td>{{ "address.singular" | trans }}</td>
+                            <td>
+                                {% if entity.delivery.contactPerson is not empty %}
+                                    {{ entity.delivery.contactPerson }}<br />
+                                {% endif %}
+
+                                {{ entity.delivery.deliveryAddress }}<br />
+                                {{ entity.delivery.deliveryPostalCode }} {{ entity.delivery.deliveryCity }}<br />
+                                {{ entity.delivery.state }} -
+                                {{ entity.delivery.country.name | trans }}
+                            </td>
+                        </tr>
+
+                        {% if entity.delivery.phone is not empty %}
+                            <tr>
+                                <td>{{ "phone" | trans }}</td>
+                                <td>{{ entity.delivery.phone }}</td>
+                            </tr>
+                        {% endif %}
+
+                        {% if entity.delivery.phone2 is not empty %}
+                            <tr>
+                                <td>{{ "phone.second" | trans }}</td>
+                                <td>{{ entity.delivery.phone2 }}</td>
+                            </tr>
+                        {% endif %}
+
+                        <tr>
+                            <td>{{ "chosen.schedule" | trans }}</td>
+                            <td>
+                                {% if entity.delivery.preferredSchedule == 1%}{{ 'schedule.anytime' | trans }}{% endif %}
+                                {% if entity.delivery.preferredSchedule == 2%}{{ 'schedule.morning' | trans }}{% endif %}
+                                {% if entity.delivery.preferredSchedule == 3%}{{ 'schedule.evening' | trans }}{% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                        <td>{{ "transaction.observations" | trans }}</td>
+                        <td>{{ entity.delivery.notes }}</td>
+                    </tr>
+                    
+                    {%endif%}
+                     
+                    <tr>
+                        <td>{{ "items" | trans }}</td>
+                        <td class="transaction-show-tables">
+                            {% if (entity.items.first.advert.id is defined) %}
+                                {{ include('PaymentBundle:Advert:table.html.twig') }}
+                            {% else  %}
+                                {{ include('PaymentBundle:Transaction:table.html.twig') }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+                                    
+                                    
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h5 class="modal-title" id="myModalLabel">{{ "transaction.payment.detail" | trans }}</h5>
+      </div>
+       <div class="modal-body">
+        <div class="box-body">
+          {{ entity.paymentDetails }}
+        </div><!-- /.box-body -->
+        </div>
+    </div>
+  </div>
+</div>
+                
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+        });
+    </script>
+{% endblock %}

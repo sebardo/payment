@@ -1,0 +1,282 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}categories{% endblock %}
+
+{% block content %}
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ entity.name }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "catalogue" | trans }}</a></li>
+        <li><a href="{{ path('payment_category_index') }}">{{ "category.plural" | trans }}</a></li>
+        {% if entity.parentCategory %}
+            <li><a href="{{ path('payment_category_show', { id: entity.parentCategory.id }) }}">{{ entity.parentCategory.name }}</a></li>
+        {% endif %}
+        <li><a href="{{ path('payment_category_show', { id: entity.id }) }}">{{ entity.name }}</a></li>
+      </ol>
+    </section>
+      
+    <section class="content">
+      <div class="row">
+          <div class="col-md-12">
+              
+              {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+            <!-- Custom Tabs -->
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#info_tab" data-toggle="tab" aria-expanded="true">{{ "information" | trans }}</a></li>
+                {#<li><a href="#attributes_tab" data-toggle="tab">{{ "attribute.plural" | trans }}</a></li>#}
+                <li><a href="#features_tab" data-toggle="tab">{{ "feature.plural" | trans }}</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active show-tables" id="info_tab">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td>{{ "name" | trans }}</td>
+                            <td>{{ entity.name }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "description" | trans }}</td>
+                            <td>{{ entity.description }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "meta.title" | trans }}</td>
+                            <td>{{ entity.metaTitle }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "meta.description" | trans }}</td>
+                            <td>{{ entity.metaDescription }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ "meta.tags" | trans }}</td>
+                            <td>{{ entity.metaTags }}</td>
+                        </tr>
+                        {% if entity.family %}
+                            <tr>
+                                <td>{{ "family.singular" | trans }}</td>
+                                <td><a href="{{ path('payment_family_show', { id: entity.family.id }) }}">{{ entity.family.name }}</a></td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td>{{ "category.parent" | trans }}</td>
+                                <td>{% if entity.parentCategory.id is defined%}<a href="{{ path('payment_category_show', { id: entity.parentCategory.id }) }}">{{ entity.parentCategory }}</a>{% endif %}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <td>{{ "image.singular" | trans }}</td>
+                            <td>
+                                {% if entity.image %}
+                                    <img width="200" src="{{ asset('uploads/images/' ~ entity.image) }}" alt="{{ entity.image }}" />
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>{{ "URL" }}</td>
+                            <td><a href="{{ entity.url }}">{{ entity.url }}</a></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="box-footer">
+                        <div class="col-sm-12"> 
+                            <a href="{{ path('payment_category_edit', { id: entity.id }) }}" class="btn btn-primary btn-flat"><i class="ion-compose"></i> {{ "edit" | trans }}</a>
+                            <button type="submit" class="btn btn-danger btn-flat pull-right" id="delete-btn">{{ "delete" | trans }}</button>    
+                            <form id="delete-entity" action="{{ path('payment_category_delete', { id: entity.id }) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                {{ form_widget(delete_form) }}
+                            </form>
+                        </div>
+                    </div><!-- /.box-footer -->
+                </div><!-- /.tab-pane -->
+                 <div class="tab-pane" id="attributes_tab">
+                    <!-- TABLE PORTLET-->
+                    <div class="portlet-body">
+                        <div class="clearfix">
+                            <div class="btn-group">
+                                <a href="{{ path('payment_attribute_new', { category: entity.id }) }}" class="btn btn-success btn-flat">
+                                    {{ "add.new.2" | trans }} <i class="ion-plus"></i>
+                                </a>
+                                <a href="{{ path('payment_attribute_sort', { categoryId: entity.id }) }}" class="btn btn-info btn-flat">
+                                    {{ "attribute.sort" | trans({ '%entity%': entity.name }) }} <i class="ion-loop"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover" id="attributes-table">
+                            <thead>
+                            <tr>
+                                <th class="hidden-480">ID</th>
+                                <th class="hidden-480">{{ "name" | trans }}</th>
+                                <th class="hidden-480">{{ "order.sort" | trans }}</th>
+                                <th class="hidden-480">{{ "filtrable" | trans }}</th>
+                                <th class="hidden-480">{{ "numeric.type" | trans }}</th>
+                                <th style="width:150px;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END TABLE PORTLET-->
+                </div>
+                <div class="tab-pane" id="features_tab">
+                    <!-- TABLE PORTLET-->
+                    <div class="portlet-body">
+                        <div class="clearfix">
+                            <div class="btn-group">
+                                <a href="{{ path('payment_feature_new', { category: entity.id }) }}" class="btn btn-success btn-flat">
+                                    {{ "add.new.2" | trans }} <i class="ion-plus"></i>
+                                </a>
+                                <a href="{{ path('payment_feature_sort', { categoryId: entity.id }) }}" class="btn btn-info btn-flat">
+                                    {{ "feature.sort" | trans({ '%entity%': entity.name }) }} <i class="ion-loop"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-bordered table-hover" id="features-table">
+                            <thead>
+                            <tr>
+                                <th class="hidden-480">ID</th>
+                                <th class="hidden-480">{{ "name" | trans }}</th>
+                                <th class="hidden-480">{{ "order.sort" | trans }}</th>
+                                <th class="hidden-480">{{ "filtrable" | trans }}</th>
+                                <th class="hidden-480">{{ "numeric.type" | trans }}</th>
+                                <th style="width:150px;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- END TABLE PORTLET-->
+                </div>
+              </div><!-- /.tab-content -->
+            </div><!-- nav-tabs-custom -->
+          </div>
+      </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        var attributes_table_columns = [
+            { "mData": "id" },
+            {
+                "mData": function (source) {
+                    return '<a href="/admin/attributes/' + source.id + '">' + source.name + '</a>';
+                }
+            },
+            { "mData": "order" },
+            {
+                "mData": function(source) {
+                    var code = '';
+
+                    if (true == source.filtrable) {
+                        code = '<span class="label label-success" data-yes="{{ "yes" | trans }}" data-no="{{ "no" | trans }}">{{ "yes" | trans }}</span>';
+                    } else {
+                        code = '<span class="label label-important" data-yes="{{ "yes" | trans }}" data-no="{{ "no" | trans }}">{{ "no" | trans }}</span>';
+                    }
+
+                    code += ' <a href="/admin/attributes/' + source.id + '/toggle-filtrable" class="btn btn-primary btn-xs btn-flat toggle-filtrable"><i class="icon-refresh"></i> {{ 'change' | trans }}</a>';
+
+                    return code;
+                }
+            },
+            {
+                "mData": function(source) {
+                    var code = '';
+
+                    if (true == source.rangeable) {
+                        code = '<span class="label label-success">{{ "yes" | trans }}</span>';
+                    } else {
+                        code = '<span class="label label-important">{{ "no" | trans }}</span>';
+                    }
+
+                    return code;
+                }
+            },
+            {
+                "mData": function(source) {
+                    return '<a href="/admin/attributes/' + source.id + '/values/" class="btn btn-info btn-xs btn-flat"><i class="ion-compose"></i> {{ "value.plural" | trans }}</a> ' +
+                            '<a href="/admin/attributes/' + source.id + '/edit" class="btn btn-primary btn-xs btn-flat"><i class="ion-compose"></i> {{ "edit" | trans }}</a> ';
+                }
+            }
+        ];
+
+        var features_table_columns = [
+            { "mData": "id" },
+            {
+                "mData": function (source) {
+                    return '<a href="/admin/features/' + source.id + '">' + source.name + '</a>';
+                }
+            },
+            { "mData": "order" },
+            {
+                "mData": function(source) {
+                    var code = '';
+
+                    if (true == source.filtrable) {
+                        code = '<span class="label label-success" data-yes="{{ "yes" | trans }}" data-no="{{ "no" | trans }}">{{ "yes" | trans }}</span>';
+                    } else {
+                        code = '<span class="label label-danger" data-yes="{{ "yes" | trans }}" data-no="{{ "no" | trans }}">{{ "no" | trans }}</span>';
+                    }
+
+                    code += ' <a href="/admin/features/' + source.id + '/toggle-filtrable" class="btn btn-primary btn-xs btn-flat toggle-filtrable"><i class="ion-loop"></i> {{ 'change' | trans }}</a>';
+
+                    return code;
+                }
+            },
+            {
+                "mData": function(source) {
+                    var code = '';
+
+                    if (true == source.rangeable) {
+                        code = '<span class="label label-success">{{ "yes" | trans }}</span>';
+                    } else {
+                        code = '<span class="label label-danger">{{ "no" | trans }}</span>';
+                    }
+
+                    return code;
+                }
+            },
+            {
+                "mData": function(source) {
+                    return '<a href="/admin/features/' + source.id + '/values/" class="btn btn-info btn-xs btn-flat"><i class="ion-compose"></i> {{ "value.plural" | trans }}</a> ' +
+                            '<a href="/admin/features/' + source.id + '/edit" class="btn btn-primary btn-xs btn-flat"><i class="ion-compose"></i> {{ "edit" | trans }}</a> ';
+                }
+            }
+        ];
+
+        jQuery(document).ready(function() {
+            $('#delete-btn').on('click', function(e) {
+                e.preventDefault();
+
+                if (confirm('{{ "are.you.sure" | trans }}')) {
+                    $('#delete-entity').submit();
+                }
+            });
+
+
+            TableManaged.init(
+                '#attributes-table',
+                '{{ url('payment_attribute_listjson', { categoryId: entity.id }) }}',
+                [4],
+                attributes_table_columns,
+                '{{ url('admin_default_getdatatablesi18n', { language: app.request.locale }) }}');
+
+            TableManaged.init(
+                '#features-table',
+                '{{ url('payment_feature_listjson', { categoryId: entity.id }) }}',
+                [4],
+                features_table_columns,
+                '{{ url('admin_default_getdatatablesi18n', { language: app.request.locale }) }}');
+        });
+    </script>
+{% endblock %}

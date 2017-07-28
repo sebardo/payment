@@ -1,0 +1,6 @@
+
+ {{ form_start(form, {'attr': {'action': path('payment_checkout_summary'), 'id': 'payment-'~psp.paymentMethod.slug } } ) }}
+    {{ form_errors(form) }}
+    {# here add custom html from configuration#} 
+ {{ form_end(form) }}
+ 

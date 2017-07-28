@@ -1,0 +1,21 @@
+{{ form_errors(form) }}
+
+{{ form_row(form.name, { label: 'name*' }) }}
+{{ form_row(form.description, { label: 'description*' }) }}
+{{ form_row(form.metaTitle, { label: 'meta.title*'}) }}
+{{ form_row(form.metaDescription, { label: 'meta.description*' }) }}
+{{ form_row(form.metaTags, { label: 'meta.tags' }) }}
+
+{% if categoryId is not defined %}
+    {{ form_row(form.parentCategory, { label: 'category.parent' }) }}
+{% endif %}
+
+{% if entity is defined and entity.image is not null %}
+    {{ form_row(form.image.file, { div_class: 'no-bottom', image: entity.image.path }) }}
+{% else %}
+    {{ form_row(form.image.file, { div_class: 'no-bottom' }) }}
+{% endif %}
+{{ form_row(form.url, { label: 'URL' }) }}
+{{ form_widget(form.active, { label: 'active' }) }}
+
+{{ form_rest(form) }}

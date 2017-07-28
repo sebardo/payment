@@ -1,0 +1,51 @@
+{% form_theme form 'CoreBundle:Form:errors.html.twig' %}
+
+{{ form_errors(form) }}
+
+<div class="form-group">
+    <label class="control-label col-sm-3" for="email">{{'account.passport' | trans}}</label>
+    <div class="col-sm-3">
+        {{ form_widget(form.dni, {attr: {'class': 'form-control'} }) }}
+        {{ form_errors(form.dni) }}
+    </div>
+    <label class="control-label col-sm-3 estiloDeFormDatosFacturacion" for="email">{{'account.chosen.schedule' | trans}}</label>
+    <div class="col-sm-3">
+        {{ form_widget(form.preferredSchedule, {attr: {'class': 'form-control'} }) }}
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label col-sm-3" for="email">{{'account.address.singular' | trans}}</label>
+    <div class="col-sm-4">
+        {{ form_widget(form.address, {attr: {'class': 'form-control'} }) }}
+    </div>
+    <label class="control-label col-sm-2" for="email">{{'account.postal.code' | trans}}</label>
+    <div class="col-sm-3">
+        {{ form_widget(form.postalCode, {attr: {'class': 'form-control'} }) }}
+    </div>
+</div>
+    
+<div class="form-group">
+    <label class="control-label col-sm-3" for="email">{{'account.country' | trans}}</label>
+    <div class="col-sm-3">
+      {{ form_widget(form.country, {attr: {'class': 'form-control'} }) }}
+    </div>
+    <label class="control-label col-sm-2" for="email">{{'account.province.singular' | trans}}</label>
+    <div class="col-sm-4">
+      {{ form_widget(form.state, {attr: {'class': 'form-control'} }) }}
+    </div>
+</div>    
+
+<div class="form-group">
+   <label class="control-label col-sm-3" for="email">{{'account.city' | trans}}</label>
+   <div class="col-sm-3">
+     {{ form_widget(form.city, {attr: {'class': 'form-control'} }) }}
+   </div>
+   <label class="control-label col-sm-3" for="email">{{'account.phone' | trans}}</label>
+   <div class="col-sm-3">
+     {{ form_widget(form.phone, {attr: {'class': 'form-control'} }) }}
+   </div>
+</div>   
+  
+
+{{ form_rest(form) }}

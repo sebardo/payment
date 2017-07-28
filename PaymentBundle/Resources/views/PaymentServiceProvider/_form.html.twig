@@ -1,0 +1,62 @@
+{{ form_errors(form) }}
+
+{{ form_row(form.paymentMethod.name, { label: 'psp.payment.method' }) }}
+{{ form_row(form.recurring) }}
+{{ form_row(form.isTestingAccount) }}
+{{ form_row(form.active) }}
+
+
+<div class="form-group ">
+    <label class="col-sm-2 control-label required" for="payment_service_provider_paymentMethod_name">
+        {{ form_label(form.apiCredentialParameters) }}
+    </label>
+    <div class="col-sm-10">
+        <ul style="background: transparent!important" id="credential-fields-list"
+            data-prototype="{{ form_widget(form.apiCredentialParameters.vars.prototype)|e }}">
+            
+        {% for credentialField in form.apiCredentialParameters %}
+            <li >
+                {{ form_errors(credentialField) }}
+                <label class="col-sm-2 control-label required">{{ credentialField.vars.name }}</label>
+                <div class="col-sm-4">{{ form_widget(credentialField, {attr: {'class': 'form-control'} } ) }}</div>
+            </li>
+        {% else %}
+            {{ form_widget(form.apiCredentialParameters) }}
+        {% endfor %}
+        </ul>
+
+        <a class="btn btn-flat btn-primary" href="#" id="add-another-credential">
+            <i class="ion-plus"></i>
+            {{ 'psp.add.credential' | trans  }}
+        </a>
+    </div>
+</div>
+
+    
+<!-- Modal -->
+<div id="credentialModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">{{ 'psp.add.credential.key' | trans  }}</h4>
+      </div>
+      <div class="modal-body">
+          <p><input class="form-control" style="width: 100%" type="text" id="add-label" placeholder="{{ 'psp.add.credential.key' | trans  }}"/></p>
+      </div>
+      <div class="modal-footer">
+          <button id="add-credential-label" type="button" class="btn btn-flat btn-success" data-dismiss="modal">{{ 'save' | trans  }}</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+    
+
+
+
+
+   

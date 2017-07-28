@@ -1,0 +1,14 @@
+{% if delivery %}
+    {{ delivery.fullName }} ({{ "checkout.customer.number" | trans }}: {{ app.user.id }})<br />
+    {{ delivery.contactPerson is not null ? (delivery.contactPerson ~ '<br />') | raw }}
+    {{ delivery.dni }}<br />
+    {{ delivery.address }}<br />
+    {{ delivery.postalCode }} {{ delivery.city }}<br />
+    {{ delivery.state }}, {{ delivery.country.name }}
+{% else %}
+    {% set actor = invoice.transaction.actor %}
+    {{ actor.name }} ({{ "checkout.customer.number" | trans }}: {{ actor.id }})<br />
+    {{ actor.addresses.first.address }}<br />
+    {{ actor.addresses.first.postalCode }} {{ actor.addresses.first.city }}<br />
+    {{ actor.addresses.first.state }}, {{ actor.addresses.first.country.name }}
+{% endif %}

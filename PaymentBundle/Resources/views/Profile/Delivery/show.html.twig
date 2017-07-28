@@ -1,0 +1,53 @@
+<h3>{{ 'account.delivery.info' | trans }}</h3>
+
+{% for address in get_addresses() %}
+    <div class="col-md-6 address active">
+        <p>
+            {% if address.contactPerson is not empty %}
+                {{ address.contactPerson }}<br />
+            {% endif %}
+            {{ address.dni }}<br />
+            {{ address.address }}<br />
+            {{ address.postalCode }} {{ address.city }}<br />
+            {% if address.state.name is defined %}{{ address.state.name }}{% endif %}, {{ address.country.name }}
+        </p>
+        <p>
+            <b>{{ 'account.chosen.schedule' | trans }}</b>: {{address.preferredSchedule}}<br />
+            <b>{{ 'account.phone.singular' | trans }}</b>: {{ address.phone }}
+            {% if address.phone2 is not empty %}
+                <br /><b>{{ 'account.phone.second' | trans }}</b>: {{ address.phone2 }}
+            {% endif %}
+
+            {% if address.isForBilling %}
+                <br /><b>  <i class="isforbilling"><i class="ion-asterisk"></i> {{ 'account.address.for.billing' | trans }}</i></b>
+            {% else %}
+                <br />
+                <a href="{{ path('payment_checkout_setbillingaddress', { id: address.id }) }}" title="{{ 'account.address.assign.for.billing' | trans }}">
+                    {{ 'account.address.assign.for.billing' | trans }}
+                </a>
+            {% endif %}
+        </p>
+        <div class="profile-buttons">
+            <a  href="javascript:void(0);" id="{{ address.id }}" class="btn btn-core edit-address"  title="{{ 'edit.singular' | trans }}">
+                <span class="ion-edit"></span> {{ 'edit.singular' | trans }}
+            </a>
+            <a href="{{ path('payment_checkout_deletedelivery', { id: address.id }) }}" class="btn btn-core delete-button" title="{{ 'delete' | trans }}">
+                <i class="ion-trash-a"></i> {{ 'delete' | trans }}
+            </a>
+        </div>
+           
+    </div>
+{% else %}
+{{ 'account.address.none' | trans }}
+{% endfor %}
+
+
+{% for address in get_addresses() %}
+    <div id="address-{{address.id}}" style="display: none">
+        <h4>{{ 'account.address.edit' | trans }}</h4>
+        {% set formAddress = get_address_form(address.id) %}
+        {{ include('PaymentBundle:Profile:Delivery/edit.html.twig', { delivery_form: formAddress, address: address }) }}
+    </div>  
+{% endfor %}
+
+<div style="clear: both"></div>

@@ -1,0 +1,142 @@
+     <div class="row">
+        <div class="col-sm-12 col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{{ "product.singular" | trans }}</th>
+                        <th>{{ "checkout.units" | trans }}</th>
+                        <th class="text-center">{{ 'price' | trans }}</th>
+                        <th class="text-center">{{ 'discount' | trans }}</th>
+                        <th class="text-center">{{ 'checkout.total' | trans }}</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set cart_total = 0 %}
+                    {% set cart_total_no_vat = 0 %}
+                    {% set amount_for_delivery_expenses = 0 %}
+                    {% set freeTransport = 0 %}
+                    {% for item in cart.items %}
+                        {% set product = item.product %}
+                        <tr>
+                            <td class="col-sm-7 col-md-5">
+                                <div class="media">
+                                    <a class="thumbnail pull-left" href="#"> 
+                                        <img class="media-object" src="{{ get_product_image(product, '142') }}" > 
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading product-name">
+                                            <a href="{{ path('fontcatalogue_typography_show', { id: product.id, slug: product.slug }) }}" title="{{ product.name }}">
+                                               {{ product.name }}
+                                            </a>
+                                         </h4>
+                                        <span>Status: </span><span class="text-success"><strong>In Stock</strong></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-1 col-md-1" style="text-align: center">
+                                {{ form_row(form.items[loop.index0].quantity, { label: false, attr: {'class': 'form-control', 'data-price':  product.price} }) }}
+                            </td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.initPrice | price(true,true)}}</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.discount }} {% if product.discountType %}%{%else%}€{% endif %}</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>{{ (product.price * item.quantity) | prices(product.priceType) }}</strong></td>
+                            <td class="col-sm-1 col-md-1">
+                                <a href="{{ path('payment_checkout_remove', { id: item.id }) }}" class="btn btn-danger remove" title="{{ "cart.remove" | trans }}">
+                                    <span class="glyphicon glyphicon-remove"></span>{{ 'remove' | trans }}
+                                </a>
+                             </td>
+                        </tr>
+                        
+                        {% if item.product.discount %}
+                            {% set cart_total = cart_total + (item.product.price * item.quantity) %}
+                            {% set cart_total_no_vat =  cart_total_no_vat + (item.product.price * item.quantity) %}
+                        {% else %}
+                            {% set cart_total = cart_total + (product.price(true) * item.quantity) %}
+                            {% set cart_total_no_vat =  cart_total_no_vat + (item.product.price * item.quantity) %}
+                        {% endif %}
+
+
+                        {% if item.product.isFreeTransport == false %}
+                            {% if item.product.discount %}
+                                {% set amount_for_delivery_expenses =  amount_for_delivery_expenses + (item.product.price * item.quantity) %}
+                            {% else %}
+                                {% set amount_for_delivery_expenses =  amount_for_delivery_expenses + (item.product.price * item.quantity) %}
+                            {% endif %}
+                        {% endif %}
+                     {% endfor %}    
+                     
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h5>Subtotal</h5></td>
+                        <td class="text-right">
+                             
+                            <h5><strong>$24.59</strong></h5>
+                        </td>
+                    </tr>
+                    <tr class="delivery-line">
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h5>Estimated shipping</h5></td>
+                        <td class="text-right">
+                            <h5> 
+                                {% set delivery_expenses = (amount_for_delivery_expenses * (get_parameter('core.delivery_expenses_percentage') / 100)) | price(false,false,false,2,'.',',') %}
+                                <strong id="gastos_envio">{{ delivery_expenses | price(true,true) }}</strong>
+                            </h5>
+                        </td>
+                    </tr>
+                    {% if freeTransport %}
+                        <tr class="free_transport-line">
+                            <td>   </td>
+                            <td>   </td>
+                            <td>   </td>
+                            <td>   </td>
+                            <td><h3>Transporte Gratuito</h3></td>
+                            <td class="text-right">
+                                <h3><strong>{{ delivery_expenses | price(true,true) }}</strong></h3>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h3>Total</h3></td>
+                        <td class="text-right">
+                            <h3>
+                                <strong>
+                                    {% if 'by_percentage' == get_parameter('core.delivery_expenses_type') %}
+                                        {{ (cart_total + delivery_expenses) | price(true, false) }}
+                                    {% else %}
+                                        {{ cart_total_no_vat | price(true, true) }}
+                                    {% endif %}
+                                </strong>
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>
+                            {% set referer = get_referer(app.request)%}
+                            {% if app.request.query.get('referer') != '' %}{% set referer = app.request.query.get('referer') %}{% endif %}
+                            <a href="{{ referer }}" class="btn btn-default continue" title="{{ "checkout.add.more" | trans }}" ><span class="glyphicon glyphicon-shopping-cart"></span> {{ "checkout.add.more" | trans }}</a>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success pay" title="{{ "checkout.pay" | trans }}">
+                                {{ "checkout.pay" | trans }} <span class="glyphicon glyphicon-play"></span>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+ 

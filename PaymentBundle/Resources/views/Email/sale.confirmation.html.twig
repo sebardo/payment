@@ -1,0 +1,46 @@
+{% block subject %}{{ 'invoice.email.subject' | trans({ '%app_name%': twig_global.getParameter('name'), '%order_number%': order_number }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'invoice.email.congratulations' | trans }}
+
+{{ 'invoice.email.message' | trans }}
+
+{{ 'transaction.number' | trans }}: {{ order_number }}
+{{ 'total' | trans }}: {{ amount  }}
+{{ 'invoice.payment.type' | trans }}: {{ payment_type | trans }}
+
+{{ 'invoice.email.view.invoice' | trans }}: {{ order_url }}
+
+{{ 'invoice.email.contact.us' | trans }}
+
+{{ 'invoice.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name')}) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'invoice.email.congratulations' | trans }}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'invoice.email.message' | trans }}</p>
+
+    <b>{{ 'transaction.number' | trans }}:</b> {{ order_number }}<br />
+    <b>{{ 'total' | trans }}:</b> {{ amount  }}<br />
+    <b>{{ 'invoice.payment.type' | trans }}:</b> {{ payment_type | trans }}
+
+    <p style="padding:20px 0; margin:0;">{{ 'invoice.email.view.invoice' | trans }}: {{ order_url }}</p>
+
+    {% if payment_type == 'invoice.payment.by.bank.transfer' %}
+        <p style="padding:20px 0; margin:0;">{{ 'invoice.email.transfer.data' | trans({ '%order_number%': order_number, '%account_number%': twig_global.getParameter('bank_account') }) | raw }}</p>
+    {% endif %}
+                
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'invoice.email.contact.us' | trans }}</p>
+
+    <p style="padding:0; margin:0;">{{ 'invoice.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

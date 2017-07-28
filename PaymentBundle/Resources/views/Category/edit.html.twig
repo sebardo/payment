@@ -1,0 +1,87 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+{% form_theme edit_form 'AdminBundle:Form:fields.html.twig' %}
+
+{% block section %}categories{% endblock %}
+
+{% block content %}
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "edit" | trans }} {{ entity.name }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "catalogue" | trans }}</a></li>
+        <li><a href="{{ path('payment_category_index') }}">{{ "category.plural" | trans }}</a></li>
+        {% if entity.parentCategory %}
+            <li><a href="{{ path('payment_category_show', { id: entity.parentCategory.id }) }}">{{ entity.parentCategory.name }}</a></li>
+        {% endif %}
+        <li><a href="{{ path('payment_category_show', { id: entity.id }) }}">{{ entity.name }}</a></li>
+        <li><a href="{{ path('payment_category_edit', { id: entity.id }) }}">{{ "edit" | trans }} </a></li>
+      </ol>
+    </section>
+      
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            
+            {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+            <div class="box box-info">
+                <!-- BEGIN FORM-->
+                {{ form_start(edit_form, {
+                                    'action': path('payment_category_edit', { id: entity.id }), 
+                                    'method': 'post', 
+                                    'attr': {'class': 'form-horizontal form-row-seperated'}
+                                    }) }}
+                    <div class="box-body">
+                        {{ include('PaymentBundle:Category:_form.html.twig', { form: edit_form }) }}
+                    </div><!-- /.box-body -->
+                    
+                    <div class="box-footer">
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary btn-flat"><i class="ion-checkmark"></i> {{ "save" | trans }}</button>
+                            <a href="{{ path('payment_category_show', { id: entity.id }) }}" class="btn btn-default btn-flat">{{ "cancel" | trans }}</a>
+                            <button type="submit" class="btn btn-danger btn-flat pull-right" id="delete-btn">{{ "delete" | trans }}</button>
+                        </div>
+                    </div>
+                {{ form_end(edit_form) }}
+                <form id="delete-entity" action="{{ path('payment_category_delete', { id: entity.id }) }}" method="post">
+                    <input type="hidden" name="_method" value="DELETE" />
+                    {{ form_widget(delete_form) }}
+                </form>
+            </div>
+        </div>
+      </div>
+    </section>
+ 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+            $('#delete-btn').on('click', function(e) {
+                e.preventDefault();
+
+                if (confirm('{{ "are.you.sure" | trans }}')) {
+                    $('#delete-entity').submit();
+                }
+            });
+
+            $('#paymentbundle_categorytype_family').select2({
+                placeholder: "",
+                allowClear: true
+            });
+            $('#paymentbundle_categorytype_parentCategory').select2({
+                placeholder: "",
+                allowClear: true
+            });
+            $('#paymentbundle_categorytype_categoryProductAssembly').select2({
+                width: '700px'
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}listenerlogs{% endblock %}
+
+{% block content %}
+    
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "listenerlog.singular" | trans }} #{{ entity.id }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="{{ path('payment_listenerlog_index') }}">{{ "listenerlog.plural" | trans }}</a></li>
+      </ol>
+    </section>  
+      
+    <section class="content">
+      <div class="row">
+          <div class="col-md-12">
+              <div class="box">
+                  <div class="box-body show-tables">
+                       <table class="table">
+                            <tbody>
+                            <tr>
+                                <td>ID</td>
+                                <td>{{ entity.id }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ "listenerlog.type" | trans }}</td>
+                                <td>{{ entity.type }}</td>
+                            </tr>
+                            
+                            <tr>
+                                <td>{{ "listenerlog.verified" | trans }}</td>
+                                <td>
+                                    {% if(entity.valid) %}
+                                        <span class="label label-success">{{'listenerlog.valid'|trans}}</span>
+                                    {% else %}
+                                        <span class="label label-danger">{{'listenerlog.invalid'|trans }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td>{{ "listenerlog.input" | trans }}</td>
+                                <td>
+                                    <a href="#" onclick="return false;"  id="input-detail">Ver detalle</a>
+                                    <pre id="input-detail-inner" style="display: none"></pre>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>{{ "listenerlog.created" | trans }}</td>
+                                <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                  </div>
+                  <div class="box-footer">
+                        <div class="col-sm-12"> 
+                            <button type="submit" class="btn btn-danger btn-flat pull-right" id="delete-btn">{{ "delete" | trans }}</button>
+                            <form id="delete-entity" action="{{ path('payment_listenerlog_delete', { id: entity.id }) }}" method="post">
+                                <input type="hidden" name="_method" value="DELETE" />
+                                {{ form_widget(delete_form) }}
+                            </form>
+                        </div>
+                  </div><!-- /.box-footer -->
+              </div>
+          </div>
+      </div>
+    </section>
+ 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        
+        function output(id, data) {
+            $('#'+id).html(data);
+        }
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        }
+
+        {% if entity.input != '' %}
+            var input = {{entity.input|raw }};
+            var str = JSON.stringify(input, undefined, 4);
+            output('input-detail-inner', syntaxHighlight( str));
+        {% endif %}    
+        jQuery(document).ready(function() {
+            $('#delete-btn').on('click', function(e) {
+                e.preventDefault();
+
+                if (confirm('{{ "are.you.sure" | trans }}')) {
+                    $('#delete-entity').submit();
+                }
+            });
+            
+            $('#input-detail').click(function(){
+                $('#input-detail-inner').fadeToggle('slow');
+            });
+            
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,90 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}paymentserviceproviders{% endblock %}
+
+{% block content %}
+    
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ entity.paymentMethod.name }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "sales" | trans }}</a></li>
+        <li><a href="{{ path('payment_paymentserviceprovider_index') }}">{{ "psp.plural" | trans }}</a></li>
+        <li><a href="{{ path('payment_paymentserviceprovider_show', { id: entity.id }) }}">{{ entity.paymentMethod.name }}</a></li>
+      </ol>
+    </section>
+      
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+            
+            {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+            
+            <div class="box box-info">
+                <div class="box-body show-tables">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Id</td>
+                                <td>{{ entity.id }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'psp.payment.method' | trans  }}</td>
+                                <td>{% if entity.apicredentialparameters %}{{ entity.apicredentialparameters|join(', ') }}{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>Api_credential_parameters</td>
+                                <td>{% if entity.apicredentialparameters %}{{ entity.apicredentialparameters|join(', ') }}{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'psp.recurring' | trans  }}</td>
+                                <td>{% if entity.recurring %}Yes{% else %}No{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'psp.test' | trans  }}</td>
+                                <td>{% if entity.isTestingAccount %}Yes{% else %}No{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ 'active' | trans  }}</td>
+                                <td>{% if entity.active %}Yes{% else %}No{% endif %}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                  </div>
+                <div class="box-footer">
+                    <a href="{{ path('payment_paymentserviceprovider_edit', { id: entity.id }) }}" class="btn btn-primary btn-flat"><i class="ion-compose"></i> {{ "edit" | trans }}</a>
+                    <button type="submit" class="btn btn-danger btn-flat pull-right" id="delete-btn">{{ "delete" | trans }}</button>
+                    <form id="delete-entity" action="{{ path('payment_paymentserviceprovider_delete', { 'id': entity.id }) }}" method="post">
+                        <input type="hidden" name="_method" value="DELETE" />
+                        {{ form_widget(delete_form) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+            $('#delete-btn').on('click', function(e) {
+                e.preventDefault();
+
+                if (confirm('{{ "are.you.sure" | trans }}')) {
+                    $('#delete-entity').submit();
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

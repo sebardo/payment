@@ -1,0 +1,70 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}features{% endblock %}
+
+{% block content %}
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{ "category.sort" | trans }}
+        <small></small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="{{ path('admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+        <li><a href="javascript:">{{ "catalogue" | trans }}</a></li>
+        <li><a href="{{ path('payment_category_index') }}">{{ "category.singular" | trans}}</a></li>
+        <li><a href="{{ path('payment_category_sort') }}">{{ "category.sort" | trans  }}</a></li>
+      </ol>
+    </section>
+      
+    <section class="content">
+      <div class="row">
+          <div class="col-md-12"> 
+             <div class="box">
+                <div class="box-body">
+                {{ include('AdminBundle:Default:_sort_loader.html.twig') }}
+                <!-- TABLE PORTLET-->
+                <div class="portlet-body nestable-list">
+                    <div class="dd" id="nestable-features">
+                        <ol class="dd-list">
+                            {% for category in categories %}
+                                <li class="dd-item" data-id="{{ category.id }}">
+                                    <div class="dd-handle">{{ category.name }}</div>
+                                </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
+                </div>
+                <a class="btn" href="{{ path('payment_category_index') }}" title="{{ 'back' | trans }}">{{ 'back' | trans }}</a>
+                </div>
+             </div>
+          </div>
+      </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        function updateOutput(e) {
+            var list = e.length ? e : $(e.target)
+            var values = window.JSON.stringify(list.nestable('serialize'));
+
+            $('#sort-loader').addClass('loading');
+
+            $.post('/admin/categories/sort', { values: values })
+            .done(function() {
+                $('#sort-loader').removeClass('loading');
+            });
+        }
+
+        jQuery(document).ready(function() {
+
+            $('#nestable-features').nestable({
+                group: 1
+            }).on('change', updateOutput);
+        });
+    </script>
+{% endblock %}

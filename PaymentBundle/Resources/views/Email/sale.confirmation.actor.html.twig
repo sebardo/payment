@@ -1,0 +1,58 @@
+{% block subject %}{{ 'sale.email.subject' | trans({ '%app_name%': twig_global.getParameter('name'), '%order_number%': order_number }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'sale.email.congratulations' | trans }}{{optic.name}}
+
+{{ 'sale.email.message'| trans }}
+
+{% for item in products%}
+    {% set product = item.product %}
+    {{ product.name }} => {{twig_global.getParameter('server_base_url')}}{{ path('optisoop_front_product_show', { 'slug': product.slug }) }}
+    {{ 'sale.email.message.product'| trans({ '%product_quantity%': item.quantity, '%product_name%': product.name, '%product_price%': product.price | prices(product.priceType) }) | raw }}
+    =========================================================
+{% endfor %}
+
+{%if token != ''%}
+{{ 'sale.email.bank.account'| trans({ '%company_name%': twig_global.getParameter('name'), '%server_base_url%' : twig_global.getParameter('server_base_url'), '%token_url%': twig_global.getParameter('server_base_url')~'/rellena-tu-cuenta-bancaria?token='~token }) | raw}}
+{%endif%}
+
+{{ 'sale.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'sale.email.congratulations' | trans }} {{optic.name}}</p>
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'sale.email.message'| trans }}</p>
+    
+    <p style="padding:0 0 20px 0; margin:0;overflow: hidden;{%if products|length > 1%} border-bottom: 1px solid #444; {%endif%}">
+        {% for item in products%}
+            {% set product = item.product %}
+            {% if product.images is defined %}
+                {% set path = '/bundles/front/images/optic-default_260.jpg' %}
+                {% if product.images|length > 0 %}
+                    {% set image = get_thumb_image(product.images.first.path, '260') %}
+                    {% if image != ''%} {% set path = '/uploads/images/product/'~product.id~'/thumbnail/'~image %} {% endif %}
+                {% endif %}
+            {% endif%}
+            <a style="float: left;margin-right: 10px" title="{{product.name}}" href="{{twig_global.getParameter('server_base_url' })}}{{ path('optisoop_front_product_show', { 'slug': product.slug })}}"><img width="142" src="{{ path }}"/></a>
+            {{ 'sale.email.message.product'| trans({ '%product_quantity%': item.quantity, '%product_name%': product.name, '%product_price%': product.price | prices(product.priceType)  }) | raw }}
+        {% endfor %}
+    </p>             
+    
+    {%if token != ''%}
+        <div style="margin:20px 0;">
+            {{ 'sale.email.bank.account'| trans({ '%company_name%': twig_global.getParameter('name'), '%server_base_url%' : twig_global.getParameter('server_base_url' }), '%token_url%': twig_global.getParameter('server_base_url' })~'/rellena-tu-cuenta-bancaria?token='~token }) | raw}}
+        </div>
+    {%endif%}
+
+    <p style="padding:0; margin:0;">{{ 'sale.email.thanks' | trans({ '%app_name%': twig_global.getParameter('name') }) }}</p>
+
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

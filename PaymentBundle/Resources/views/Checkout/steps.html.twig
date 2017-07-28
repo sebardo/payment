@@ -1,0 +1,67 @@
+{% set cart = cart_get() %}    
+<div class="row bs-wizard" style="border-bottom:0;margin-bottom: 30px">
+    <div class="col-xs-3 bs-wizard-step {% if step == 'cart' %}active{% elseif step == 'identification' or step == 'delivery' or step == 'summary' %}complete{% else %}disabled{% endif%}">
+      <div class="text-center bs-wizard-stepnum">1</div>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="bs-wizard-dot" id='dot1'></a>
+      <div class="bs-wizard-info text-center">{% if cart.totalItems > 0 %}{{ "cart.items" | transchoice(cart.totalItems, { '%items%': '<a href="javascript:void(0)" data-placement="bottom" data-toggle="popover">' ~ cart.totalItems ~ '</a>' }) | raw }}{%else%} {{ "cart.singular" | trans }}{% endif %}</div>
+    </div>
+
+    <div class="col-xs-3 bs-wizard-step {% if step == 'identification' %}active{% elseif step == 'delivery' or step == 'summary' %}complete{%else%}disabled{% endif%}"><!-- complete or active or disabled-->
+      <div class="text-center bs-wizard-stepnum">2</div>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="bs-wizard-dot"></a>
+      <div class="bs-wizard-info text-center">{{ "checkout.identification" | trans }}</div>
+    </div>
+
+    <div class="col-xs-3 bs-wizard-step {% if step == 'delivery' %}active{% elseif step == 'summary' %}complete{%else%}disabled{% endif%}"><!-- complete -->
+      <div class="text-center bs-wizard-stepnum">3</div>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="bs-wizard-dot"></a>
+      <div class="bs-wizard-info text-center">Datos de envío</div>
+    </div>
+
+    <div class="col-xs-3 bs-wizard-step {% if step == 'summary' %}active{%else%}disabled{% endif%}"><!-- active -->
+      <div class="text-center bs-wizard-stepnum">4</div>
+      <div class="progress"><div class="progress-bar"></div></div>
+      <a href="#" class="bs-wizard-dot"></a>
+      <div class="bs-wizard-info text-center">Resumen y pago</div>
+    </div>
+</div>
+{#
+
+<div class="row">
+    <div class="checkout-steps">
+        <hr>
+        <div class="step step-1 {% if step == 'summary' or
+                                      step == 'identification' or
+                                      step == 'delivery' or
+                                      step == 'pay' or
+                                      step == 'invoice'%}active{% endif%}">
+            <span>1</span>
+            <span>Vista previa</span>
+        </div>
+        <div class="step step-2 {% if step == 'identification' or
+                                      step == 'delivery' or
+                                      step == 'pay' or
+                                      step == 'invoice' %}active{% endif%}">
+            <span>2</span>
+            <span>Identificación</span>
+        </div>
+        <div class="step step-3 {% if step == 'delivery' or
+                                      step == 'pay' or
+                                      step == 'invoice' %}active{% endif%}">
+            <span>3</span>
+            <span>Datos para el envio</span>
+        </div>
+        <div class="step step-4 {% if step == 'pay' or
+                                      step == 'invoice' %}active{% endif%}">
+            <span>4</span>
+            <span>Detalle y Pago</span>
+        </div>
+        <div class="step step-5 {% if step == 'invoice' %}active{% endif%}">
+            <span>5</span>
+            <span>Factura</span>
+        </div>
+    </div>
+</div>   #}

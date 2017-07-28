@@ -1,0 +1,23 @@
+<div class="item  col-xs-4 col-lg-4">
+    <div class="thumbnail">
+        <img class="group list-group-image" src="{{ get_product_image(product) }}" alt="" />
+        <div class="caption">
+            <h4 class="group inner list-group-item-heading">
+                {{ product.name }}
+            </h4>
+            <p class="group inner list-group-item-text">
+                {{ product.description }}
+            </p>
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <p class="lead">
+                        {{ product.price | price(true,true)}}
+                    </p>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <a class="btn btn-success" href="{{ path('payment_checkout_product', {'slug': product.slug }) }}">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

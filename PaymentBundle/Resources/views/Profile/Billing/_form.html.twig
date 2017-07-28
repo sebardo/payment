@@ -1,0 +1,13 @@
+{% if billing_form is defined %}
+    {% set  form =  billing_form %}
+{% else %}
+    {% set  form = get_billing_form() %}    
+{% endif %}
+<form class="form-horizontal billing-form" method="post" action="{{ path('payment_checkout_editbilling') }}" {{ form_enctype(form) }}>
+    <div class="space-bottom">
+        {{ include('PaymentBundle:Profile:Delivery/_form.html.twig', { form: form }) }}
+    </div>
+    <div class="profile-buttons">
+        <button type="submit" class="btn btn-core pull-right billing-submit"> <i class="ion-checkmark"></i> {{ 'save' | trans }}</button> 
+    </div>
+</form>

@@ -1,0 +1,26 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block content %}
+
+<div id="transactions">
+    <div class="col-md-12 container-content">
+        <div class="col-md-3">
+            {{ include('PaymentBundle:Profile:_sidebar.html.twig', { section: 'transactions' }) }}
+        </div>
+
+        <div class="col-md-9">
+            {% include 'CoreBundle:Base:alert.messages.html.twig'%}
+            <div class="container-table-transactions">
+                {% if transactions is empty %}
+                    {{ 'transaction.none' | trans }}
+                {% else %}
+                    {% include 'PaymentBundle:Profile/Transaction:_content.html.twig'%}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+</div>
+   
+
+{% endblock %}

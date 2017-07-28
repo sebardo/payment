@@ -1,0 +1,35 @@
+{% block subject %}{{ 'cupon.email.subject' | trans({ '%app_name%': twig_global.getParameter('name') }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+{{ 'cupon.email.greeting' | trans }},
+{% if password is null %}
+    {{ 'cupon.email.message.auth' | trans({'%product_name%' : product.name, '%actor_name%' : product.actor.name}) | raw }}
+{% else %}
+    {{ 'cupon.email.message' | trans({'%email%' : user.email, '%password%': password }) | raw }}
+    <a href="{{twig_global.getParameter('server_base_url')}}{{ path('register_validate' , {'hash': user.salt, 'email': user.email}) }}">{{ 'validate.email.text' | trans }}</a><br>
+    <i>{{ 'validate.email.valid24hs' | trans }}</i>
+{% endif %}
+
+{{ 'cupon.email.thanks' | trans }}.
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+{% spaceless %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+
+    <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.email.greeting' | trans }},</p>
+
+    {% if password is null %}
+        {{ 'cupon.email.message.auth' | trans({'%product_name%' : product.name, '%actor_name%' : product.actor.name}) | raw }}
+    {% else %}
+        <p style="padding:0 0 20px 0; margin:0;">{{ 'cupon.email.message' | trans({ '%email%' : user.email, '%password%': password })  | raw }}</p>
+        <p style="padding:0 0 20px 0; margin:0;"><a href="{{twig_global.getParameter('server_base_url')}}{{ path('register_validate' , {'hash': user.salt, 'email': user.email}) }}">{{ 'validate.email.text' | trans }}</a></p>
+        <p style="padding:0 0 20px 0; margin:0;"><i>{{ 'validate.email.valid24hs' | trans }}</i></p>
+    {% endif %}
+    <p style="padding:0;">{{ 'cupon.email.thanks' | trans }}.</p>
+    
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endspaceless %}
+{% endblock %}

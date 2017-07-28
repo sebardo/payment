@@ -1,0 +1,102 @@
+{% extends twig_global.getParameter('extended_layout_admin') ? twig_global.getParameter('extended_layout_admin') : 'AdminBundle:Base:layout.html.twig' %}
+
+{% block section %}actors{% endblock %}
+
+{% block content %}
+    <!-- BEGIN PAGE CONTAINER-->
+    <div class="container-fluid">
+        <!-- BEGIN PAGE HEADER-->
+        <div class="row-fluid">
+            <div class="span12">
+                <!-- BEGIN PAGE TITLE & BREADCRUMB-->
+                <h3 class="page-title">
+                    {{ entity.actor.name }} - {{ "address.singular" | trans }}
+                </h3>
+                <ul class="breadcrumb">
+                    <li><a href="{{ path('core_admin_default_index') }}"> <i class="ion-home"></i>  {{ "home" | trans }}</a></li>
+                    <li><a href="javascript:">{{ "catalogue" | trans }}</a></li>
+                    <li><a href="{{ path('payment_actor_index') }}">{{ "user.plural" | trans }}</a></li>
+                    <li><a href="{{ path('payment_actor_show', { id: entity.actor.id }) }}">{{ entity.actor.name ~ ' ' ~ entity.actor.lastname }}</a></li>
+                    <li><a href="{{ path('payment_address_show', { actorId: entity.actor.id, id: entity.id }) }}">{{ 'address.singular' | trans }}</a></li>
+                </ul>
+                <!-- END PAGE TITLE & BREADCRUMB-->
+            </div>
+        </div>
+        <!-- END PAGE HEADER-->
+
+        <!-- BEGIN PAGE CONTENT-->
+        <div class="row-fluid profile">
+            <div class="span12">
+                <div class="tabbable tabbable-custom boxless custom-border">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#info_tab" data-toggle="tab">{{ "information" | trans }}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="info_tab">
+                            <div class="portlet box custom">
+                                <div class="portlet-body profile">
+                                    <table class="table">
+                                        <tbody>
+                                        <tr>
+                                            <td>{{ "contact.person" | trans }}</td>
+                                            <td>{{ entity.contactPerson is not empty ? entity.contactPerson : '-' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>DNI</td>
+                                            <td>{{ entity.dni }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "address.singular" | trans }}</td>
+                                            <td>{{ entity.address }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "city" | trans }}</td>
+                                            <td>{{ entity.city }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "province" | trans }}</td>
+                                            <td>{{ entity.provinces[entity.province] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "postal.code" | trans }}</td>
+                                            <td>{{ entity.postalCode }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "country" | trans }}</td>
+                                            <td>{{ entity.countries[entity.country] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "phone" | trans }}</td>
+                                            <td>{{ entity.phone }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "phone.second" | trans }}</td>
+                                            <td>{{ entity.phone2 }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ "chosen.schedule" | trans }}</td>
+                                            <td>{{ entity.schedules[entity.preferredSchedule] | trans }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--END TABS-->
+            </div>
+        </div>
+        <!-- END PAGE CONTENT-->
+    </div>
+    <!-- END PAGE CONTAINER-->
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script>
+        jQuery(document).ready(function() {
+        });
+    </script>
+{% endblock %}

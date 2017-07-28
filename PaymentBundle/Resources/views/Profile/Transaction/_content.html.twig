@@ -1,0 +1,38 @@
+<h3>{{'transaction.plural' | trans}}</h3>
+    
+<table class="table table-striped ">
+    <thead>
+        <tr>
+            <th>{{ 'transaction.number' | trans }}</th>
+            <th>{{ 'transaction.date' | trans }}</th>
+            <th>{{ 'transaction.amount' | trans }}</th>
+            <th>{{ 'transaction.status' | trans }}</th>
+            <th>{{ 'transaction.payment.method' | trans }}</th>
+            <th>&nbsp;</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in get_transactions() %}
+        <tr>
+            <td>{{ transaction.transactionKey }}</td>
+            <td>{{ transaction.created | date('d/m/Y') }}</td>
+            {% if transaction.items.first.product.id is defined %}
+                <td>{{ transaction.totalPrice | prices(transaction.items.first.product.priceType) }}</td>
+            {% else %}
+                <td>{{ transaction.totalPrice | prices(0) }}</td>
+            {% endif %}
+            <td>{{ include('PaymentBundle:Profile:Transaction/_status.html.twig', { transaction: transaction }) }}</td>
+            <td>
+                {{transaction.paymentMethod.name}}
+            </td>
+            <td>
+                {% if transaction.invoice.invoiceNumber is defined %}
+                    <a href="{{ path('payment_checkout_showinvoice', { number: transaction.invoice.invoiceNumber }) }}" class="btn-xs btn-core">{{ 'transaction.details' | trans }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table> 
+ 
+

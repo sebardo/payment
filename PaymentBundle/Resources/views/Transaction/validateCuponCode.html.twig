@@ -1,0 +1,7 @@
+<form method="post" action="{{ path('payment_transaction_validatecuponcode', { id: entity.id }) }}">
+    {{ form_row(form.cuponCode, { label: 'transaction.cupon.code' }) }}
+
+    {{ form_rest(form) }}
+
+    <button class="btn btn-primary btn-flat">{{ 'save' | trans }}</button>
+</form>

@@ -1,0 +1,32 @@
+{% block subject %}{{ 'sale.notification.email.subject' | trans({ '%order_number%': order_number }) }}{% endblock %}
+
+{% block body_text %}
+{% autoescape false %}
+    
+{{ 'sale.notification.email.hello' | trans }}
+
+{{ 'sale.notification.email.date' | trans({ '%date%': invoice_date | date('d/m/Y') }) }}
+
+{{ 'sale.notification.email.buyer' | trans({ '%buyer_email%': user_email }) }}
+
+{{ 'sale.notification.email.seller' | trans({ '%seller_email%': seller_email }) }}
+
+{{ 'sale.notification.email.url' | trans({ '%url%': order_details_url }) }}
+{% endautoescape %}
+{% endblock %}
+
+{% block body_html %}
+    {{ include('CoreBundle:Email:_header.html.twig') }}
+    
+    <p style="padding:20px 0; margin:0;">{{ 'sale.notification.email.hello' | trans }}</br>
+
+    <p style="padding:5px 0; margin:0;">{{ 'sale.notification.email.date' | trans({ '%date%': invoice_date | date('d/m/Y') }) }}</br>
+
+    <p style="padding:5px 0; margin:0;">{{ 'sale.notification.email.buyer' | trans({ '%buyer_email%': user_email}) }}</br>
+    
+    <p style="padding:5px 0; margin:0;">{{ 'sale.notification.email.seller' | trans({ '%seller_email%': seller_email}) }}</br>
+
+    <p style="padding:5px 0; margin:0;">{{ 'sale.notification.email.url' | trans({ '%url%': order_details_url }) }}</p>
+    
+    {{ include('CoreBundle:Email:_footer.html.twig') }}
+{% endblock %}

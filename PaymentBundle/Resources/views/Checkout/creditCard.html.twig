@@ -1,0 +1,80 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+{% form_theme form 'FrontBundle:Form:base.fields.html.twig' %}
+
+{% block breadcrumb_inner %}
+    <li class="active"><a href="{{path('payment_checkout_creditcard')}}">Pago</a></li>
+{% endblock %}
+
+{% block content %}
+
+     <div class="col-md-12 cc-content">
+        <div class="col-md-3 hidden-xs"></div>
+        <div class="col-md-6 col-xs-12" >
+            <div class="col-xs-12">
+                <h1 class="title">Realizar pago</h1>
+                <p>
+                    Estimado cliente, por favor rellene los todos los campos obligatorios para poder realizar su compra en nuestro sitio web, Gracias por confiar en nosotros.
+                </p>
+                {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+                <div class="col-md-10 col-xs-12">
+                    <div class="row">
+                        {{ form_start(form) }}
+                            {{ form_errors(form) }}
+                                
+                                {{ form_row(form.plan) }}
+                                {{ form_row(form.firstname, {'label': 'firstname' | trans }) }}
+                                {{ form_row(form.lastname, {'label': 'lastname' | trans }) }}
+                                {{ form_row(form.cardType) }}
+                                {{ form_row(form.cardNo) }}
+                                 <div class="form-group">
+                                  {{ form_label(form.expirationDate, null, { label_attr: {class: 'col-sm-4 control-label'} }) }}
+                                  <div class="col-sm-8">
+                                    {{ form_widget(form.expirationDate.day, { attr:  {style: 'display:none'} } ) }}
+                                    {{ form_widget(form.expirationDate.month, { attr:  {class: 'form-control'} } ) }}
+                                    {{ form_widget(form.expirationDate.year, { attr:  {class: 'form-control'} } ) }}
+                                  </div>
+                                </div>
+                                    
+                                <div class="form-group">
+                                  {{ form_label(form.CVV, null, { label_attr: {class: 'col-sm-4 control-label'} }) }}
+                                  <div class="col-sm-8">
+                                      {{ form_widget(form.CVV, { attr: {class: 'form-control'} }) }}<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                  </div>
+                                </div>  
+                                    
+                                {{ form_row(form.CVV) }}
+                                {{ form_row(form.ts) }}
+                                
+                                 <div class="form-group pay">
+                                     <label class='col-sm-4 control-label'>
+                                         <img src="/bundles/front/images/pay.jpg">
+                                     </label>
+                                    <div class="col-sm-8">
+                                        {{ form_widget(form.submit, { attr: {class: 'col-sm-8 btn btn-flat btn-success btn-block'} }) }}
+                                    </div>
+                                </div>
+                                {{ form_rest(form) }}
+                        {{ form_end(form) }}
+                        
+                       
+                    </div>
+            
+                </div>
+                <div class="col-md-2 hidden-xs"></div>
+            </div>
+            
+        </div>
+        <div class="col-md-3" ></div>
+
+    </div>
+     
+        
+{% endblock %}
+    
+    
+{% block javascripts %}
+        {{ parent() }}
+        
+         
+
+{% endblock %}

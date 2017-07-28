@@ -1,0 +1,47 @@
+<div class="row">
+    {% if form.deliveryContactPerson is defined %}
+        <div class="col-sm-4">
+            {{ form_row(form.deliveryContactPerson, { label: 'account.contact.person' }) }}
+        </div>
+    {% endif %}
+
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryDni, { label: 'account.passport'}) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-8">
+        {{ form_row(form.deliveryAddress, { label: 'account.address.singular' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryCity, { label: 'account.city' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryState, { label: 'account.state.singular' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryPostalCode, { label: 'account.postal.code' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryPhone, { label: 'account.phone.singular' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryPhone2, { label: 'account.phone.second' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.deliveryPreferredSchedule, { label: 'account.chosen.schedule' }) }}
+    </div>
+</div>

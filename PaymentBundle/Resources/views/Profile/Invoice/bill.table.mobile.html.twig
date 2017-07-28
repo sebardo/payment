@@ -1,0 +1,40 @@
+<div class="col-xs-12" style="    padding-top: 15px;">
+    <table style="width: 100%;color:#fff;">
+        {% for item in invoice.transaction.items %}
+            <tr>
+                <td>
+                    {{ "invoice.description" | trans }}
+                </td>
+                <td class="alignRight">
+                    {{ item.product.name }}
+                </td>
+
+            </tr>
+            <tr>
+                <td>
+                     {{ "checkout.units" | trans }} {{ item.quantity }}
+                </td>
+                <td class="alignRight">
+                      {{ (item.product.price * item.quantity) | price }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td> {{ "checkout.delivery.costs" | trans }}</td>
+            <td class="alignRight">
+                <strong>
+                    + {{ totals.delivery_expenses | price }}
+                </strong>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ "vat" | trans }} ({{ get_parameter('vat') }}%)
+            </td>
+            <td class="alignRight">
+                <strong>+ {{ totals.vat | price }}</strong>
+            </td>
+        </tr>
+
+    </table>
+</div> 

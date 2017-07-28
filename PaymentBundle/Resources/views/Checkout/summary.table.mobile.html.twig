@@ -1,0 +1,54 @@
+<table class="cart-table total" style="width: 100%;">
+    {% for item in transaction.items %}
+        {% set product = item.product %}
+        <tr>
+            <td class="title">
+                <span>{{ item.product.name }}</span>
+            </td>
+            
+            <td class="price3">
+                {{ item.quantity }} x
+                {% if  product.discount %}
+                    <span>{{ (product.discountedPrice * item.quantity) | price(true,true) }}</span>
+                {% else %}
+                    <span>{{ (product.price * item.quantity) | price(true) }}</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+
+    <tr>
+        <td class="title">
+            <span>{{ "checkout.delivery.costs" | trans }}</span>
+        </td>
+        <td class="price">
+            {% if 'by_carrier' == get_parameter('core.delivery_expenses_type') %}
+                ({{ delivery.carrier.name }} - {{ delivery.carrier.transitTime }}h)
+            {% endif %}
+            <strong>{{ totals.delivery_expenses | price }}</strong>
+        </td>
+    </tr>
+
+    <tr class="subtotal">
+        
+        <td>
+            <span><strong>{{ "checkout.subtotal" | trans }}</strong>:</span><br>
+            <span>{{ "vat" | trans }} ({{ get_parameter('payment.vat') }}%):</span>
+        </td>
+        
+        <td class="price3">
+            <strong>{{ (transaction.totalPrice + totals.delivery_expenses) | price }}</strong><br>
+            <span>+ {{ totals.vat | price }}</span>
+        </td>
+    </tr>
+
+    <tr class="total">
+         
+        <td >
+            <strong>{{ "total.to.pay" | trans }}:</strong>
+        </td>
+        <td class="price3">
+            <em>{{ totals.amount | price }}</em>
+        </td>
+    </tr>
+</table>

@@ -1,0 +1,17 @@
+{% if constant('PaymentBundle\\Entity\\Transaction::STATUS_PENDING_TRANSFER') == transaction.status %}
+    <span class="label label-warning">{{ 'status.pending.transfer' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_PAID') == transaction.status %}
+    <span class="label label-success">{{ 'status.paid' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_CREATED') == transaction.status %}
+    <span class="label label-default">{{ 'status.processed' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_CANCELLED') == transaction.status %}
+    <span class="label label-danger">{{ 'status.cancelled' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_DELIVERED') == transaction.status %}
+    <span class="label label-success">{{ 'status.sent' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_COMPLETED') == transaction.status %}
+    <span class="label label-success">{{ 'status.completed' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_RETURNED') == transaction.status %}
+    <span class="label label-default">{{ 'status.returned' | trans }}</span>
+{% elseif constant('PaymentBundle\\Entity\\Transaction::STATUS_PENDING') == transaction.status %}
+    <span class="label label-default">{{ 'status.pending' | trans }}</span>
+{% endif %}

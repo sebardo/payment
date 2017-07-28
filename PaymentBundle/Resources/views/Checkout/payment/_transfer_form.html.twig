@@ -1,0 +1,22 @@
+<div class="payment-container-form" id="bank-transfer-test">
+    <form method="post" action="{{ path('payment_checkout_summary') }}">
+        {{ form_rest(form) }}
+        
+        {{ include(template_from_string('<div class="col-sm-10 detail-transfer">
+            {{ "checkout.transfer" | trans({"%bank_name%": twig_global.getParameter("name"), "%bank_account%": twig_global.getParameter("bank_account") }) | nl2br }}
+            <br />
+        </div>
+        <div class="col-sm-12 priceAndCheck">
+            <div class="price">
+                <span>{{ "checkout.amount" | trans }}:</span>
+                <strong style="margin-right: 15px;">{{ totals.amount | price }}</strong>
+                <button >{{ "checkout.confirm" | trans }}</button>
+            </div>
+            <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
+        </div>')) }}
+            
+        
+    </form>
+</div>
+
+                                        

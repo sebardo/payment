@@ -1,0 +1,162 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+
+{% block breadcrumb %}
+   
+        <div class="col-md-12 col-xs-12">
+            <ol class="breadcrumb">
+                <li ><a href="/">Inicio</a></li>
+                <li class="active"><a href="{{path('payment_checkout_summary')}}">Detalle y pago</a></li>
+            </ol>
+        </div>
+    
+{% endblock %}
+
+{% block  content %}
+    <div class="container container-padding summary">
+        {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'summary'}  %}
+        {% block content_body %}
+            <!--content-->
+            <div class="col-md-1"></div>
+            <div class="col-md-10 col-xs-12 container-content" id="summary" >
+                <div class="row"> 
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4>{{ "checkout.details" | trans }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                {% include 'PaymentBundle:Checkout:summary.table.html.twig' %}
+                            </div>
+                        </div>
+                    </div>  
+                            
+                    <div class="col-sm-6 col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4>{{ "account.billing.info" | trans }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <p>{{ include('PaymentBundle:Checkout:addresses/_billing.html.twig') }}</p>
+                                <p><a href="mailto:{{ app.user.email }}" title="{{ app.user.email }}">{{ app.user.email }}</a></p>
+                                <a href="{{ path('payment_checkout_deliveryinfo') }}" class="orange-btn" title="{{ "account.modify.info" | trans }}">{{ "account.modify.info" | trans }}</a>            
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xs-12">
+                        
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h4>{{ "account.delivery.info" | trans }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <p>{{ include('PaymentBundle:Checkout:addresses/_delivery.html.twig') }}</p>
+                                <p>
+                                    <b>{{ "account.chosen.schedule" | trans }}</b>: {{ delivery.deliveryPreferredSchedule }}<br />
+                                    <b>{{ "account.phone.singular" | trans }}</b>: {{ delivery.deliveryPhone }}
+                                    {{ delivery.deliveryPhone2 is not null ? '- ' ~ delivery.deliveryPhone2 }}
+                                    {% if delivery.notes is not null %}
+                                        <br /><br />
+                                        <b>{{ "carrier.note" | trans }}</b>: {{ delivery.notes }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-xs-12 pay">
+                        <div >
+                            <h3>{{ "checkout.payment.method" | trans }}</h3>
+                            <div class="col-sm-12 col-xs-12">
+                                <div class="form-group ">
+                                    <div>
+                                        {% for psp in psps %}
+                                            <div class="radio">
+                                                <label>
+                                                    <input type="radio" name="payment-method" value="{{psp.slug}}" /> {{psp.name}} <br/>
+                                                </label>  
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-xs-12 pay">
+                        <div >
+                            <h3>{{ "checkout.payment.pay" | trans }}</h3>
+                            <div class="col-sm-12 col-xs-12">
+                                {% include 'CoreBundle:Base:alert.messages.html.twig' %}
+
+                                {% for psp in psps %}
+                                    <div class="payment-container-form" id="{{psp.slug}}" >
+                                        {{ form_start(psp.formView, {'attr': {'action': path('payment_checkout_summary'), 'id': 'payment-'~psp.slug } } ) }}
+                                            {{ form_errors(psp.formView) }}
+                                            {{ form_rest(psp.formView) }}
+                                            {# here add custom html from configuration#} 
+                                           {{ include(template_from_string(psp.twig)) }}
+                                        {{ form_end(psp.formView) }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+            <!--content End-->
+        {% endblock %}
+    </div>
+{% endblock %}
+
+
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+            'bundles/payment/less/step-snipet.less'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {% javascripts
+        'https://js.braintreegateway.com/js/braintree-2.27.0.min.js'
+        %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        
+        {% for psp in psps %}
+            {% if psp.slug == 'braintree' %}
+                braintree.setup("{{psp.get('ClientToken', {}, 'generate')}}", "dropin", {
+                    container: "bt-dropin",
+                    onPaymentMethodReceived: function (paymentMethod) {
+                        // Do some logic in here.
+                        // When you're ready to submit the form:
+                        console.log(paymentMethod.nonce);
+                        $('#braintree_payment_method_nonce').val(paymentMethod.nonce);
+                        $('form[name="braintree"]').submit();//myForm.submit();
+                    }
+                });
+            {% endif %}
+        {% endfor %}
+
+        
+
+        jQuery(document).ready(function() {
+            $('input[name="payment-method"]').on('change', function() {
+                {% for psp in psps %}
+                    if ('{{psp.slug}}' == $(this).val()) {
+                        $('.payment-container-form').hide();
+                        $('#{{psp.slug}}').fadeIn('slow');
+                    }
+                {% endfor %}
+            });
+            $('input[name="payment-method"]').last().click();
+        });
+    </script>
+{% endblock %}

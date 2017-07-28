@@ -1,0 +1,179 @@
+{% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
+{% form_theme form 'CoreBundle:Form:base.fields.html.twig' %}
+
+{% block breadcrumb %}
+    
+    <div class="col-md-12 col-xs-12">
+        <ol class="breadcrumb">
+            <li ><a href="/">Inicio</a></li>
+            <li class="active"><a href="{{path('payment_checkout_detail')}}">Datos de envío</a></li>
+        </ol>
+    </div>
+    
+{% endblock %}
+
+{% block  content %}
+ <div class="container container-padding delivery">
+    {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'delivery'}  %}
+
+    <div class="col-md-12 col-xs-12 container-content">
+        <!--content-->
+        <div class="cart">
+            <form name="delivery" id="delivery-form" method="post" action="{{ path('payment_checkout_deliveryinfo') }}">
+                {{ form_errors(form) }}
+                <div>
+                    <h3>{{ "account.user.profile" | trans }}</h3>
+                    <div class="row">
+                        <div class="col-sm-12" >
+                            <div class="row" >
+                                <div class="col-sm-4" >
+                                    {{ form_row(form.fullName, { 'attr': {'class': 'form-control'}, 'label': 'account.full.name' | trans }  ) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3>{{ "account.billing.info" | trans }}</h3>
+                    <div class="row">
+                        <div class="col-sm-12" >
+                             {{ include('PaymentBundle:Checkout:addresses/_billing_form.html.twig') }}
+                        </div>
+                    </div>    
+                </div>  
+                <div>
+                    <h3>{{ "account.delivery.info" | trans }}</h3>
+                    <div class="row">
+                        <div class="col-sm-12" >
+                            <div class="row">
+                                <div class="col-sm-12" >
+                                    {{ form_row(form.selectDelivery) }}
+                                </div>
+                            </div> 
+                        </div>
+                    </div>    
+
+                    {% if form.existingDeliveryAddress is defined %}
+                        <div class="row {{ not app.session.has('existing-delivery-address') ? "hidden" }}" id="existing-delivery-address">
+                            <div class="col-sm-6">
+                                {{ form_row(form.existingDeliveryAddress, { label: false }) }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row {{ not app.session.has('select-delivery') or 'new' != app.session.get('select-delivery') ? "hidden" }}" id="new-delivery-address">
+                        {{ include('PaymentBundle:Checkout:addresses/_delivery_form.html.twig') }}
+                    </div>
+
+                </div> 
+                <div>
+                    <h3>{{ "transaction.observations" | trans }}</h3>
+                    <div class="row" >
+                        <div class="col-sm-12 col-xs-12" >  
+                            <div class="row" >
+                                <div class="col-sm-12" >  
+                                    <div class="form-group">
+                                        <div class="observation-message">{{ "transaction.observations.message" | trans }}</div>
+                                        {{ form_widget(form.notes, {'attr': {'class': 'delivery-observations col-xs-12'} }) }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="submit-delivery">
+
+                        <button type="submit" class="btn btn-primary btn-lg btn-flat">{{ "pager.next" | trans }}</button>
+
+                </div>
+                {{ form_rest(form) }}
+            </form>
+        </div>
+        <!--content End-->
+    </div> 
+ </div>         
+    
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+            'bundles/payment/less/step-snipet.less'
+    %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    {#% javascripts
+        'bundles/core/plugins/select2/select2.min.js'
+        filter='?yui_js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %#}
+
+    <script>
+        jQuery(document).ready(function() {
+             $('#delivery-form').find('input[name="paymentbundle_deliverytype[selectDelivery]"]').on('change', function() {
+                if ('same' == $(this).val()) {
+                    $('#new-delivery-address').addClass('hidden');
+                    $('#existing-delivery-address').addClass('hidden');
+                } else if ('existing' == $(this).val()) {
+                    $('#new-delivery-address').addClass('hidden');
+                    $('#existing-delivery-address').removeClass('hidden');
+                } else if ('new' == $(this).val()) {
+                    $('#new-delivery-address').removeClass('hidden');
+                    $('#existing-delivery-address').addClass('hidden');
+                }
+            });
+        
+            {#$('#paymentbundle_deliverytype_province').select2({
+                placeholder: "{{ 'account.province.choose' | trans }}",
+                allowClear: true,
+                width: 'element'
+            });
+
+            $('#paymentbundle_deliverytype_preferredSchedule').select2({
+                placeholder: "{{ 'account.choose.schedule' | trans }}",
+                allowClear: true,
+                width: 'element'
+            });
+
+            $('#paymentbundle_deliverytype_existingDeliveryAddress').select2({
+                placeholder: "{{ 'account.address.select' | trans }}",
+                allowClear: true,
+                width: 'element'
+            });
+
+            $('#paymentbundle_deliverytype_deliveryProvince').select2({
+                placeholder: "{{ 'account.province.choose' | trans }}",
+                allowClear: true,
+                width: 'element'
+            });
+
+            $('#paymentbundle_deliverytype_deliveryPreferredSchedule').select2({
+                placeholder: "{{ 'account.choose.schedule' | trans }}",
+                allowClear: true,
+                width: 'element'
+            });
+
+            $('#paymentbundle_deliverytype_carrier').select2({
+                width: 'element'
+            });#}
+
+            $('#register').find('input[name="paymentbundle_deliverytype[selectDelivery]"]').on('change', function() {
+                if ('new' == $(this).val()) {
+                    $('#paymentbundle_deliverytype_deliveryDni').val('');
+                    $('#paymentbundle_deliverytype_deliveryAddress').val('');
+                    $('#paymentbundle_deliverytype_deliveryCity').val('');
+                    $('#paymentbundle_deliverytype_deliveryProvince').val('');
+                    $('#paymentbundle_deliverytype_deliveryPostalCode').val('');
+                    $('#paymentbundle_deliverytype_deliveryPhone').val('');
+                    $('#paymentbundle_deliverytype_deliveryPhone2').val('');
+                    $('#paymentbundle_deliverytype_deliveryPreferredSchedule').val('');
+                }
+            });
+        });
+    </script>
+{% endblock %}
