@@ -1,0 +1,23 @@
+{
+    "name": "sebardo/payment",
+    "type": "library",
+    "description": "Payment bundle",
+    "keywords": ["payment", "ecommerce"],
+    "homepage": "https://github.com/sebardo/payment",
+    "license": "GNU",
+    "authors": [
+        {
+            "name": "Dario Sebastian Sasturain",
+            "email": "sebastian.sasturain@gmail.com",
+            "homepage": "http://sasturain.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "sebardo/admin": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"PaymentBundle\\": "PaymentBundle"}
+    }
+}
