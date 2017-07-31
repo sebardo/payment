@@ -20,7 +20,7 @@ class LoadPaymentData extends SqlScriptFixture
 {
     public function createFixtures()
     {
-        
+        $this->runSqlScript('Translation.sql');
         //get dinamic product class
         $productClass = $this->container->get('core_manager')->getProductClass();
 
