@@ -28,14 +28,14 @@ class LoadPaymentData extends SqlScriptFixture
         /**
          * Bundle fixtures
          */
-        if($this->container->getParameter('core.fixture_bundle')){
+        if($this->container->getParameter('core.fixture_bundle_payment')){
             $this->runSqlScript('Translation.sql');
         }
         
         /**
          * Dev fixtures
          */
-        if($this->container->getParameter('core.fixtures_dev')){
+        if($this->container->getParameter('core.fixtures_dev_payment')){
             //get dinamic product class
             $productClass = $this->container->get('core_manager')->getProductClass();
 
