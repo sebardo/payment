@@ -1,8 +1,8 @@
 {% if constant('STATUS_PENDING_TRANSFER', entity) == entity.status %}
-    <span class="label label-warning">{{ "status.pending.transfer" | trans }}</span>
+    <span class="label label-warning">{{ "transaction.status.pending.transfer" | trans }}</span>
     <a class="btn btn-primary btn-flat" href="{{ path('payment_transaction_authorizepayment', { id: entity.id }) }}">{{ 'transaction.authorize.payment' | trans }}</a>
 {% elseif constant('STATUS_PENDING', entity) == entity.status %}
-    <span class="label label-warning">{{ "status.processed" | trans }}</span>
+    <span class="label label-warning">{{ "transaction.status.processed" | trans }}</span>
     <br /><br />
     {% if entity.paymentMethod == 'store_pickup' %}
          {{ render(controller('PaymentBundle:Transaction:validateCuponCode', { id: entity.id })) }}
@@ -10,26 +10,26 @@
          {{ render(controller('PaymentBundle:Transaction:setTrackingCode', { id: entity.id })) }}
     {% endif %}
 {% elseif constant('STATUS_PENDING_APPROVAL', entity) == entity.status %}
-    <span class="label label-primary">{{ "status.pending.approval" | trans }}</span>
+    <span class="label label-primary">{{ "transaction.status.pending.approval" | trans }}</span>
     Approval url: <a target="_blank" href="{{ get_approval_link(entity)}}">{{ get_approval_link(entity)}}</a>
     
 {% elseif constant('STATUS_PAID', entity) == entity.status %}
-    <span class="label label-success">{{ "status.paid" | trans }}</span>
+    <span class="label label-success">{{ "transaction.status.paid" | trans }}</span>
     
     {% if entity.paymentMethod != 'store_pickup' and entity.items.first.product.id is defined %}<br /><br />
          {{ render(controller('PaymentBundle:Transaction:setTrackingCode', { id: entity.id })) }}
     {% endif %}
 
 {% elseif constant('STATUS_CANCELLED', entity) == entity.status %}
-    <span class="label label-danger">{{ "status.cancelled" | trans }}</span>
+    <span class="label label-danger">{{ "transaction.status.cancelled" | trans }}</span>
 {% elseif constant('STATUS_DELIVERED', entity) == entity.status %}
-    <span class="label label-success">{{ "status.sent" | trans }}</span>
+    <span class="label label-success">{{ "transaction.status.sent" | trans }}</span>
     <br /><br />
     {{ "transaction.tracking.code" | trans }}: <strong>{{ entity.delivery.trackingCode }}</strong>
 {% elseif constant('STATUS_COMPLETED', entity) == entity.status %}
-    <span class="label label-success">{{ "status.completed" | trans }}</span>
+    <span class="label label-success">{{ "transaction.status.completed" | trans }}</span>
     {{ "transaction.tracking.code" | trans }}: <strong>{{ entity.delivery.trackingCode }}</strong>
 {% elseif constant('STATUS_RETURNED', entity) == entity.status %}
-    <span class="label">{{ "status.returned" | trans }}</span>
+    <span class="label">{{ "transaction.status.returned" | trans }}</span>
     {{ "transaction.tracking.code" | trans }}: <strong>{{ entity.delivery.trackingCode }}</strong>
 {% endif %}

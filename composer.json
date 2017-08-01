@@ -16,6 +16,7 @@
     "require": {
         "php": ">=5.3.0",
         "sebardo/admin": "dev-master",
+        "ensepar/html2pdf-bundle" : "~2.0",
         "braintree/braintree_php": "*"
     },
     "autoload": {

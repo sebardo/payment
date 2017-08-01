@@ -40,12 +40,12 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>{{ "date" | trans }}</td>
+                        <td>{{ "transaction.date" | trans }}</td>
                         <td>{{ entity.created.format('d/m/Y h:i') }}</td>
                     </tr>
                     
                     <tr>
-                        <td>{{ "status.singular" | trans }}</td>
+                        <td>{{ "transaction.status.singular" | trans }}</td>
                         <td>
                             {% include ('PaymentBundle:Transaction:status.html.twig')%}
                         </td>
@@ -57,7 +57,7 @@
                         </tr>
                     {% endif %}
                     <tr>
-                        <td>{{ "user.singular" | trans }}</td>
+                        <td>{{ "user" | trans }}</td>
                         <td>
                             <a href="{{ path('core_actor_show', { id: entity.actor.id }) }}">{{ entity.actor.fullName }}</a>
                         </td>
@@ -101,11 +101,11 @@
                         {% endif %}
 
                         <tr>
-                            <td>{{ "chosen.schedule" | trans }}</td>
+                            <td>{{ "checkout.schedule.choose" | trans }}</td>
                             <td>
-                                {% if entity.delivery.preferredSchedule == 1%}{{ 'schedule.anytime' | trans }}{% endif %}
-                                {% if entity.delivery.preferredSchedule == 2%}{{ 'schedule.morning' | trans }}{% endif %}
-                                {% if entity.delivery.preferredSchedule == 3%}{{ 'schedule.evening' | trans }}{% endif %}
+                                {% if entity.delivery.preferredSchedule == 1%}{{ 'checkout.schedule.anytime' | trans }}{% endif %}
+                                {% if entity.delivery.preferredSchedule == 2%}{{ 'checkout.schedule.morning' | trans }}{% endif %}
+                                {% if entity.delivery.preferredSchedule == 3%}{{ 'checkout.schedule.evening' | trans }}{% endif %}
                             </td>
                         </tr>
 
@@ -119,11 +119,7 @@
                     <tr>
                         <td>{{ "items" | trans }}</td>
                         <td class="transaction-show-tables">
-                            {% if (entity.items.first.advert.id is defined) %}
-                                {{ include('PaymentBundle:Advert:table.html.twig') }}
-                            {% else  %}
-                                {{ include('PaymentBundle:Transaction:table.html.twig') }}
-                            {% endif %}
+                            {{ include('PaymentBundle:Transaction:table.html.twig') }}
                         </td>
                     </tr>
                     </tbody>

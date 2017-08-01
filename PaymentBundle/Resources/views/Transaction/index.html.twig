@@ -31,9 +31,9 @@
                         <tr>
                             <th class="hidden-480">{{ "number" | trans }}</th>
                             <th class="hidden-480">{{ "date" | trans }}</th>
-                            <th class="hidden-480">{{ "user.singular" | trans }}</th>
+                            <th class="hidden-480">{{ "user" | trans }}</th>
                             <th class="hidden-480">{{ "items" | trans }}</th>
-                            <th class="hidden-480">{{ "status.singular" | trans }}</th>
+                            <th class="hidden-480">{{ "transaction.status.singular" | trans }}</th>
                             <th class="hidden-480" style="width: 100px;">&nbsp;</th>
                         </tr>
                         </thead>
@@ -75,17 +75,17 @@
                     var code = '';
 
                     if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_PENDING_TRANSFER') }}" == data) {
-                        code = '<span class="label label-warning">{{ "status.pending.transfer" | trans }}</span>';
+                        code = '<span class="label label-warning">{{ "transaction.status.pending.transfer" | trans }}</span>';
                     } else if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_PENDING') }}" == data) {
-                        code = '<span class="label label-warning">{{ "status.processed" | trans }}</span>';
+                        code = '<span class="label label-warning">{{ "transaction.status.processed" | trans }}</span>';
                     } else if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_PENDING_APPROVAL') }}" == data) {
-                        code = '<span class="label label-primary">{{ "status.pending.approval" | trans }}</span>';
+                        code = '<span class="label label-primary">{{ "transaction.status.pending.approval" | trans }}</span>';
                     } else if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_CANCELLED') }}" == data) {
-                        code = '<span class="label label-danger">{{ "status.cancelled" | trans }}</span>';
+                        code = '<span class="label label-danger">{{ "transaction.status.cancelled" | trans }}</span>';
                     } else if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_DELIVERED') }}" == data) {
-                        code = '<span class="label label-success">{{ "status.sent" | trans }}</span>';
+                        code = '<span class="label label-success">{{ "transaction.status.sent" | trans }}</span>';
                     } else if ("{{ constant('PaymentBundle\\Entity\\Transaction::STATUS_PAID') }}" == data) {
-                        code = '<span class="label label-success">{{ "status.paid" | trans }}</span>';
+                        code = '<span class="label label-success">{{ "transaction.status.paid" | trans }}</span>';
                     }
 
                     return code;

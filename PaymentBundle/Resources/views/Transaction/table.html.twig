@@ -1,28 +1,12 @@
-{% if entity.items.first.product.id is defined %}
-    <th>{{ "product.singular" | trans }}</th>
-    <th>{{ "quantity" | trans }}</th>
-    <th>{{ "price" | trans }}</th>
-    <th>{{ "total.singular" | trans }}</th>
-    <th>{{ "returned" | trans }}</th>
-{% elseif (entity.items.first.plan.id is defined) %}
-    <th>{{ "product.singular" | trans }}</th>
-    <th>{{ "pay.number" | trans }}</th>
-    <th>{{ "total.singular" | trans }}</th>
-{% endif %}
-
 <table class="table table-bordered table-hover">
     <thead>
     <tr>
         {% if entity.items.first.product.id is defined %}
             <th>{{ "product.singular" | trans }}</th>
-            <th>{{ "quantity" | trans }}</th>
-            <th>{{ "price" | trans }}</th>
-            <th>{{ "total.singular" | trans }}</th>
-            <th>{{ "returned" | trans }}</th>
-        {% elseif (entity.items.first.plan.id is defined) %}
-            <th>{{ "product.singular" | trans }}</th>
-            <th>{{ "pay.number" | trans }}</th>
-            <th>{{ "total.singular" | trans }}</th>
+            <th>{{ "transaction.quantity" | trans }}</th>
+            <th>{{ "transaction.price" | trans }}</th>
+            <th>{{ "transaction.total" | trans }}</th>
+            <th>{{ "transaction.returned" | trans }}</th>
         {% endif %}
     </tr>
     </thead>
@@ -30,7 +14,7 @@
     {% for item in entity.items %}
         {% if (item.product.id is defined) %}
             <tr>
-                <td><a href="{{ path('fontcatalogue_typography_show', { id: item.product.id }) }}">{{ item.product.name }}</a></td>
+                <td><a href="{{ path('catalogue_product_show', { id: item.product.id }) }}">{{ item.product.name }}</a></td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.product.price | prices(item.product.priceType) }}</td>
                 <td>{{ (item.product.price * item.quantity) | prices(item.product.priceType) }}</td>
@@ -42,23 +26,11 @@
                     {% endif %}
                 </td>
             </tr>
-        {% elseif (item.plan.id is defined) %}
-            <tr>
-                <td style="text-align: left"><a href="{{ path('payment_plan_show', { id: item.plan.id }) }}">{{ item.plan.name }}</a></td>
-                <td>
-                {% if entity.agreement.id is defined %}
-                    {% for transaction in entity.agreement.transactions %}
-                        {% if transaction.id == entity.id %}{{loop.index}} de {{entity.agreement.plan.cycles}}{% endif %}
-                    {% endfor %}
-                {% endif %}
-                </td>
-                <td>{{ (item.totalPrice * item.quantity) | prices(0) }}</td>
-            </tr>
         {% endif %}
     {% endfor %}
     <tr>
         {% if entity.items.first.product.id is defined or  entity.items.first.plan.id %}   
-            <td>{{ "total.sub" | trans }}</td>
+            <td>{{ "transaction.subtotal" | trans }}</td>
             <td></td>
             {% if (entity.items.first.product.id is defined) %}<td></td>{% endif %}
             <td><b>{{ (entity.totalPrice+entity.tax) | price }}</b></td>
@@ -68,7 +40,7 @@
 
     {% if (entity.items.first.product.id is defined)  %}
         <tr>
-            <td>{{ "expenses" | trans }}</td>
+            <td>{{ "delivery.expenses.singular" | trans }}</td>
             <td></td>
             <td></td>
             <td>{{ totals.delivery_expenses | price }}</td>
@@ -85,7 +57,7 @@
 
     <tr>
         {% if entity.items.first.product.id is defined or  entity.items.first.plan.id %}   
-            <td>{{ "total.singular" | trans }}</td>
+            <td>{{ "transaction.total" | trans }}</td>
             <td></td>
             {% if (entity.items.first.product.id is defined) %}<td></td>{% endif %}
             <td><b>{{ totals.amount | price }}</b></td>

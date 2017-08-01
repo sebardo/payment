@@ -1,6 +1,9 @@
 <form name="payment_traking_code"  method="post" action="{{ path('payment_transaction_settrackingcode', { id: entity.id }) }}">
-    {{ form_row(form.trackingCode, { label: 'transaction.tracking.code' }) }}
-
+    
+    {{ 'transaction.tracking.code' | trans }}
+    
+    {{ form_widget(form.trackingCode, { label: 'transaction.tracking.code', attr: { class: 'form-control', 'style': 'width: 100px;display: inline-block;'} }) }}
+    
     {{ form_rest(form) }}
 
     <button class="btn btn-primary btn-flat">{{ 'save' | trans }}</button>
