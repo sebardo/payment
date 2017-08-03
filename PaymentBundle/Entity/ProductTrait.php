@@ -32,15 +32,14 @@ trait ProductTrait
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float")
-     * @Assert\NotBlank
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="price_type", type="boolean")
+     * @ORM\Column(name="price_type", type="boolean", nullable=true)
      */
     private $priceType;
     
@@ -62,9 +61,8 @@ trait ProductTrait
      * @var integer
      *
      * @ORM\Column(name="stock", type="integer")
-     * @Assert\NotBlank
      */
-    private $stock;
+    private $stock=0;
 
     /**
      * @var float
@@ -78,7 +76,7 @@ trait ProductTrait
      *
      * @ORM\Column(name="store_pickup", type="boolean")
      */
-    private $storePickup;
+    private $storePickup=0;
     
     /**
      * @var string

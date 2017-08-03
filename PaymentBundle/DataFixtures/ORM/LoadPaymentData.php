@@ -2,7 +2,6 @@
 namespace PaymentBundle\DataFixtures\ORM;
 
 use CoreBundle\DataFixtures\SqlScriptFixture;
-use CatalogueBundle\Entity\Product;
 use PaymentBundle\Entity\Transaction;
 use PaymentBundle\Entity\Invoice;
 use PaymentBundle\Entity\ProductPurchase;
@@ -28,7 +27,7 @@ class LoadPaymentData extends SqlScriptFixture
         /**
          * Bundle fixtures
          */
-        if($this->container->getParameter('core.fixture_bundle_payment')){
+        if($this->container->getParameter('core.fixtures_bundle_payment')){
             $this->runSqlScript('Translation.sql');
         }
         
