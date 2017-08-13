@@ -18,7 +18,7 @@ class ProductRelatedType extends AbstractType
     {
         $builder
             ->add('relatedProducts', EntityType::class, array(
-                'class'    => 'FontCatalogueBundle:Typography',
+                'class'    => 'CatalogueBundle:Product',
                 'multiple' => true,
             ));
     }
@@ -29,7 +29,7 @@ class ProductRelatedType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'FontCatalogueBundle\Entity\Typography',
+            'data_class' => 'CatalogueBundle\Entity\Product',
         ));
     }
 

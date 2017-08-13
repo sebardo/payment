@@ -29,14 +29,15 @@ class AddressType extends AbstractType
             ->add('dni')
             ->add('address')
             ->add('city')
-            ->add('state', EntityType::class, array(
-                    'class' => 'CoreBundle:State',
-                    'query_builder' => function(EntityRepository $er) {
-                        return $er->createQueryBuilder('c');
-                    },
-                    'required' => false,
-                    'placeholder' => 'Selecciona tu provincia',
-                ))
+            ->add('state')
+//            ->add('state', EntityType::class, array(
+//                    'class' => 'CoreBundle:State',
+//                    'query_builder' => function(EntityRepository $er) {
+//                        return $er->createQueryBuilder('c');
+//                    },
+//                    'required' => false,
+//                    'placeholder' => 'Selecciona tu provincia',
+//                ))
             ->add('country', EntityType::class, array(
                     'class' => 'CoreBundle:Country',
                     'query_builder' => function(EntityRepository $er) {
@@ -47,7 +48,6 @@ class AddressType extends AbstractType
                 ))
             ->add('postalCode')
             ->add('phone')
-            ->add('phone2')
             ->add('preferredSchedule', ChoiceType::class, array(
                 'choices'  => Address::getSchedules(),
                 'required' => false,

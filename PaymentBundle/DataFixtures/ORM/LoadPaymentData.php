@@ -37,7 +37,7 @@ class LoadPaymentData extends SqlScriptFixture
         if($this->container->getParameter('core.fixtures_dev_payment')){
             //get dinamic product class
             $productClass = $this->container->get('core_manager')->getProductClass();
-
+           
             //Create Products
             $product = new $productClass();
             $product->setName('Product test 1');
@@ -55,7 +55,7 @@ class LoadPaymentData extends SqlScriptFixture
             $product->setMetaTitle('Meta titlte test 1');
             $product->setMetaDescription('Meta description test 1');
             $product->setMetaTags('tags1, tags2');
-
+            
             $product2 = new $productClass();
             $product2->setName('Product test 2');
             $product2->setPrice(1.14);
@@ -90,6 +90,26 @@ class LoadPaymentData extends SqlScriptFixture
             $product3->setMetaTitle('Meta titlte test 3');
             $product3->setMetaDescription('Meta description test 3');
 
+            if($this->get('twig.global')->checkUse('CatalogueBundle')){
+                $category = $this->getRepository('CatalogueBundle:Category')->findOneBy(array('name' => 'Footwear'));
+                $brand = $this->getRepository('CatalogueBundle:Brand')->findOneBy(array('category' => $category, 'name' => 'Adidas'));
+                $brand2 = $this->getRepository('CatalogueBundle:Brand')->findOneBy(array('category' => $category, 'name' => 'Merrell'));
+                $model = $this->getRepository('CatalogueBundle:BrandModel')->findOneBy(array('brand' => $brand, 'name' => 'Running'));
+                $model2 = $this->getRepository('CatalogueBundle:BrandModel')->findOneBy(array('brand' => $brand2, 'name' => 'Running'));
+                
+                $product->setBrand($brand);
+                $product->setModel($model);
+                $product->setCategory($category);
+                
+                $product2->setBrand($brand);
+                $product2->setModel($model);
+                $product2->setCategory($category);
+                
+                $product3->setBrand($brand2);
+                $product3->setModel($model2);
+                $product3->setCategory($category);
+            }
+            
 
             //Create a sale (create all entities needed)
             $actor = $this->getManager()->getRepository('CoreBundle:BaseActor')->findOneByUsername('user');
@@ -334,7 +354,7 @@ class LoadPaymentData extends SqlScriptFixture
    
     public function getOrder()
     {
-        return 3; // the order in which fixtures will be loaded
+        return 4; // the order in which fixtures will be loaded
     }
 
 }

@@ -15,29 +15,11 @@
      <div class="login-container-content">
         <div class="container">
             <div class="row core-row invoice">
-                
-           
-                {% block content_header %}
-                     
-                        <div class="col-md-6 col-xs-4">
-                            <h1 class="title">
-                                FACTURA
-                            </h1>
-                         <div class="subtitle-section">Puedes ver tu factura.</div> 
-                        </div>
-                        
-                        <div class="col-md-6 col-xs-8">
-                            {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'invoice'}  %}
-                        </div>
-                    
-                 {% endblock %}
                  
-                 <div style="clear: both"></div>
-                 
-                 {% block content_body %}
                     <div id="alert-detail" class="col-md-12">
                         {% include 'CoreBundle:Base:alert.messages.html.twig'%}
                     </div>
+                    <h1>Invoice</h1>
                     <div id="invoice">
                         <div class="col-md-12 container-content">
                             <div class="container-bill">
@@ -55,7 +37,7 @@
                         </div> 
                         <div class="col-md-1"></div>      
                     </div>
-                 {% endblock %}
+                 
             </div>
         </div>
     </div>

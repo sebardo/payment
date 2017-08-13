@@ -1,0 +1,43 @@
+<div class="tab-pane {{ app.request.get('billing') ? 'active' }}" id="billing_tab">
+    <div class="portlet box custom">
+        <div class="portlet-body">
+            <div id="billing">
+                {% include 'CoreBundle:Base:alert.messages.html.twig'%}
+                <div class="container-table-billing">
+                    <h3>{{ 'account.billing.info' | trans }}</h3>
+                    {{ include('PaymentBundle:Profile:Billing/billing.form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tab-pane {{ app.request.get('delivery') ? 'active' }}" id="delivery_tab">
+    <div class="portlet box custom">
+        <div class="portlet-body">
+            {% include 'CoreBundle:Base:alert.messages.html.twig'%}
+            <div class="delivery-content">
+                {% include 'PaymentBundle:Profile/Delivery:show.html.twig'%}
+            </div>
+            <div class="delivery-new" style="display: none">
+                <h3>{{ 'account.address.add' | trans }}</h3>
+                {{ include('PaymentBundle:Profile:Delivery/new.html.twig') }}
+            </div>
+            <a id="new-delivery" href="javascript:void(0);" class="btn btn-core add-delivery">{{ 'account.address.add' | trans }}</a>
+        </div>
+    </div>
+</div>
+
+<div class="tab-pane {{ app.request.get('transactions') ? 'active' }}" id="transactions_tab">
+    <div class="portlet box custom">
+        <div class="portlet-body">
+            <div class="container-table-transactions">
+                {% if get_transactions() is empty %}
+                    {{ 'transaction.none' | trans }}
+                {% else %}
+                    {% include 'PaymentBundle:Profile/Transaction:_content.html.twig'%}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

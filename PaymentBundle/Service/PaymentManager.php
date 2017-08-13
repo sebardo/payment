@@ -99,7 +99,12 @@ class PaymentManager
     public function getRepositoryProduct() 
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $repositoryName = $this->getContainer()->getParameter('core.dynamic_discriminator_map.mapping');
-        return $em->getRepository('FontCatalogueBundle:Typography');
+        $config = $this->getContainer()->getParameter('core.dynamic_discriminator_map.mapping');
+        
+        $sub = explode('\\', $config['product']['entity']);
+        if(count($sub>2)){
+            return $em->getRepository($sub[0].':'.$sub[2]);
+        }
+        throw new \Exception('No class defined for Product entity');
     }
 }
