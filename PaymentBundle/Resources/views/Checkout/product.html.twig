@@ -77,18 +77,18 @@
                                     {% for attributeValue in product.attributeValues %}
                                         <tr>
                                             <td>
-                                                <a href="{{ path('payment_attribute_show', { id: attributeValue.attribute.id }) }}">
+                                                <a href="{#{ path('payment_attribute_show', { id: attributeValue.attribute.id }) }#}">
                                                     {{ attributeValue.attribute.name }}
                                                 </a>
                                             </td>
                                             <td>
                                                 {% if attributeValue.image %}
-                                                    <img width="100" src="{{ asset('uploads/images/' ~ attributeValue.image.path)  }}" />
+                                                    <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.image.path)  }}" />
                                                 {% elseif attributeValue.attribute.image %}
-                                                    <img width="100" src="{{ asset('uploads/images/' ~ attributeValue.attribute.image.path) }}" />
+                                                    <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.attribute.image.path) }}" />
                                                 {% endif %}
 
-                                                <a href="{{ path('payment_attributevalue_show', { attributeId: attributeValue.attribute.id, id: attributeValue.id }) }}">
+                                                <a href="{#{ path('payment_attributevalue_show', { attributeId: attributeValue.attribute.id, id: attributeValue.id }) }#}">
                                                     {{ attributeValue.name }}
                                                 </a>
                                             </td>
@@ -111,7 +111,7 @@
                                 {% for featureValue in product.featureValues %}
                                     <tr>
                                         <td>
-                                            <a href="{{ path('payment_feature_show', { id: featureValue.feature.id }) }}">
+                                            <a href="{#{ path('payment_feature_show', { id: featureValue.feature.id }) }#}">
                                                 {{ featureValue.feature.name }}
                                             </a>
                                         </td>
@@ -122,7 +122,7 @@
                                                 <img width="100" src="{{ asset('uploads/images/' ~ featureValue.feature.image.path) }}" />
                                             {% endif %}
 
-                                            <a href="{{ path('payment_featurevalue_show', { featureId: featureValue.feature.id, id: featureValue.id }) }}">
+                                            <a href="{#{ path('payment_featurevalue_show', { featureId: featureValue.feature.id, id: featureValue.id }) }#}">
                                                 {{ featureValue.name }}
                                             </a>
                                         </td>
