@@ -1,47 +1,44 @@
 {% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
 
-{% block breadcrumb %}
-   
-    <div class="col-md-12 col-xs-12">
-        <ol class="breadcrumb">
-            <li ><a href="/">Inicio</a></li>
-            <li class="active"><a href="{{path('payment_checkout_detail')}}">Carrito</a></li>
-        </ol>
-    </div>
-       
-{% endblock %}
     
 {% block content %}
-    
-    <div class="container container-padding cart-detail">
-        {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'cart'}  %}
+<div class="container-fluid container-padding">
+    <div class="content-wrapper">	
+        <div class="container">	
+            <div class="col-md-12">
+                {% set cart = cart_get() %}
+                <div id="cart-detail">
+                    <div class="col-md-1"></div>
+                        <div class="col-md-10 col-xs-12 container-content">
+                            
+                            <h1 class="title" >{{ 'checkout.details' | trans  }}</h1>
+                            <hr>
 
-        {% set cart = cart_get() %}
-        <div id="cart-detail">
-            <div class="col-md-1"></div>
-                <div class="col-md-10 col-xs-12 container-content">
-                    {% if cart.totalItems > 0%}
-                        {{ form_errors(form) }}
 
-                        <div class="container-table-cart">
-                            {{ form_start(form, {
-                                        'action': path('payment_checkout_save'), 
-                                        'method': 'post'
-                                        }) }}
-                                {% include 'PaymentBundle:Checkout/cart:table.detail.html.twig' %}
-                                {{ form_rest(form) }}
-                            {{ form_end(form) }} 
+                            {% if cart.totalItems > 0%}
+                                {{ form_errors(form) }}
+
+                                <div class="container-table-cart">
+                                    {{ form_start(form, {
+                                                'action': path('payment_checkout_save'), 
+                                                'method': 'post'
+                                                }) }}
+                                        {% include 'PaymentBundle:Checkout/cart:table.detail.html.twig' %}
+                                        {{ form_rest(form) }}
+                                    {{ form_end(form) }} 
+                                </div>
+                            {% else %}
+                                <div style="margin-bottom: 100px;margin-top: 50px">
+                                    <div class="alert alert-warning">Su carrito esta vacio, hasta el momento no ha seleccionado ningun producto.</div> 
+                                </div>
+                            {% endif %}
                         </div>
-                    {% else %}
-                        <div style="margin-bottom: 100px;margin-top: 50px">
-                            <div class="alert alert-warning">Su carrito esta vacio, hasta el momento no ha seleccionado ningun producto.</div> 
-                        </div>
-                    {% endif %}
-                </div>
-            <div class="col-md-1"></div>
-        </div> 
+                    <div class="col-md-1"></div>
+                </div> 
+            </div>
+        </div>
     </div>
-       
+</div>
 {% endblock %}
 
 {% block stylesheets %}

@@ -1,6 +1,6 @@
      <div class="row">
         <div class="col-sm-12 col-md-12">
-            <table class="table table-hover">
+            <table class="table table-borderless">
                 <thead>
                     <tr>
                         <th>{{ "product.singular" | trans }}</th>
@@ -8,7 +8,6 @@
                         <th class="text-center">{{ 'price' | trans }}</th>
                         <th class="text-center">{{ 'discount' | trans }}</th>
                         <th class="text-center">{{ 'checkout.total' | trans }}</th>
-                        <th> </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,11 +20,15 @@
                         <tr>
                             <td class="col-sm-7 col-md-5">
                                 <div class="media">
+                                    <a href="{{ path('payment_checkout_remove', { id: item.id }) }}" class="remove pull-left" title="{{ "remove" | trans }}">
+                                        <span class="glyphicon glyphicon-remove-circle"></span> 
+                                    </a>
                                     <a class="thumbnail pull-left" href="#"> 
                                         <img class="media-object" src="{{ get_product_image(product, '142') }}" > 
                                     </a>
                                     <div class="media-body">
                                         <h4 class="media-heading product-name">
+                                            
                                             <a href="{{ path('payment_checkout_product', { id: product.id, slug: product.slug }) }}" title="{{ product.name }}">
                                                {{ product.name }}
                                             </a>
@@ -40,11 +43,7 @@
                             <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.initPrice | price(true,true)}}</strong></td>
                             <td class="col-sm-1 col-md-1 text-center"><strong>{{ product.discount }} {% if product.discountType %}%{%else%}€{% endif %}</strong></td>
                             <td class="col-sm-1 col-md-1 text-center"><strong>{{ (product.price * item.quantity) | prices(product.priceType) }}</strong></td>
-                            <td class="col-sm-1 col-md-1">
-                                <a href="{{ path('payment_checkout_remove', { id: item.id }) }}" class="btn btn-danger remove" title="{{ "cart.remove" | trans }}">
-                                    <span class="glyphicon glyphicon-remove"></span>{{ 'remove' | trans }}
-                                </a>
-                             </td>
+                            
                         </tr>
                         
                         {% if item.product.discount %}
@@ -69,7 +68,6 @@
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
-                        <td>   </td>
                         <td><h5>Subtotal</h5></td>
                         <td class="text-right">
                              
@@ -77,7 +75,6 @@
                         </td>
                     </tr>
                     <tr class="delivery-line">
-                        <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
@@ -94,7 +91,6 @@
                             <td>   </td>
                             <td>   </td>
                             <td>   </td>
-                            <td>   </td>
                             <td><h3>Transporte Gratuito</h3></td>
                             <td class="text-right">
                                 <h3><strong>{{ delivery_expenses | price(true,true) }}</strong></h3>
@@ -102,7 +98,6 @@
                         </tr>
                     {% endif %}
                     <tr>
-                        <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>
@@ -120,7 +115,6 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>   </td>
                         <td>   </td>
                         <td>   </td>
                         <td>   </td>

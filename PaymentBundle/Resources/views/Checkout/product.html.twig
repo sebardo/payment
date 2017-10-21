@@ -1,31 +1,44 @@
 {% extends twig_global.getParameter('extended_layout') ? twig_global.getParameter('extended_layout') : 'CoreBundle:Base:base.layout.html.twig' %}
 
-{% block content %}
-<div class="container-fluid container-padding">
-    <div class="content-wrapper">	
-        <div class="item-container">	
-            <div class="container">	
-                <div class="col-md-5">
-                    <div class="product col-md-8 service-image-left">
-                        <center>
-                            <img id="item-display" src="{{ get_product_image(product) }}" alt=""></img>
-                        </center>
-                    </div>
-                    <div class="container service1-items col-sm-2 col-md-2 pull-left">
-                        <center>
-                            <a id="item-1" class="service1-item">
-                                <img src="{{ get_product_image(product, '142') }}" alt=""></img>
-                            </a>
-                            <a id="item-2" class="service1-item">
-                                <img src="{{ get_product_image(product, '142') }}" alt=""></img>
-                            </a>
-                            <a id="item-3" class="service1-item">
-                                <img src="{{ get_product_image(product, '142') }}" alt=""></img>
-                            </a>
-                        </center>
-                    </div>
-                </div>
+{% block container_content %}
+    
+    
+<div class="core-container product-show">
+    
+         
+    <div class="container">	
 
+        <div class="col-md-12">
+
+            <h1 class="product-title" style="display: inline-block">{{ product.name }}</h1>
+
+            <div class="product-desc">
+                {{ product.description }}
+                
+            </div>
+
+            <hr>
+            <div class="row">	
+                <div class="col-md-5">
+                    <div class="product product-image">
+                        <center>
+                            <img id="item-display" src="{{ get_product_image(product) }}" alt="">
+                        </center>
+                    </div>
+                     {% if product.images | length > 1 %}
+                        <div class="service1-items">
+                            <center>
+                                {% for image in product.images %}
+                                    {% if loop.index > 1 %}
+                                        <a id="item-{{ loop.index }}" class="service1-item">
+                                            <img src="{{ get_thumb_image(image.path, '142')}}" alt="">
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                            </center>
+                        </div>
+                    {% endif %}
+                </div>
                 <div class="col-md-7">
                     <div class="product-title">{{ product.name }}</div>
                     <div class="product-desc">The Corsair Gaming Series GS600 is the ideal price/performance choice for mid-spec gaming PC</div>
@@ -44,26 +57,25 @@
                             {{ form_widget(form.quantity, { attr: { class: 'form-control'} } ) }}
                             {{ form_rest(form) }}
                             <input type="submit" class="btn btn-success" value="{{ "cart.add" | trans }}" />    
+                            <button type="button" class="btn btn-danger">Add to wishlist </button>
                          {{ form_end(form) }} 
                     </div>
-                    <div class="btn-group wishlist">
-                        <button type="button" class="btn btn-danger">
-                            Add to wishlist 
-                        </button>
-                    </div>
-                </div>
-            </div> 
-        </div>
                     
-        {% if product.attributeValues is defined %}   
-            <div class="container-fluid">		
-                <div class="col-md-12 product-info">
-                    <ul id="myTab" class="nav nav-tabs nav_tabs">
-                        <li class="active"><a href="#service-one" data-toggle="tab">{{ 'description' | trans }}</a></li>
-                        <li><a href="#service-two" data-toggle="tab">{{ "attribute.plural" | trans }}</a></li>
-                        <li><a href="#service-three" data-toggle="tab">{{ "feature.plural" | trans }}</a></li>
-                        <li><a href="#service-four" data-toggle="tab">{{ "product.related" | trans }}</a></li>
-                    </ul>
+                </div>
+            </div>            
+        </div>
+    </div>
+
+
+    {% if product.attributeValues is defined %}   
+        <div class="container container-product-detail">		
+            <div class="col-md-12 product-info">
+                <ul id="myTab" class="nav nav-tabs nav_tabs">
+                    <li class="active"><a href="#service-one" data-toggle="tab">{{ 'description' | trans }}</a></li>
+                    <li><a href="#service-two" data-toggle="tab">{{ "attribute.plural" | trans }}</a></li>
+                    <li><a href="#service-three" data-toggle="tab">{{ "feature.plural" | trans }}</a></li>
+                    <li><a href="#service-four" data-toggle="tab">{{ "product.related" | trans }}</a></li>
+                </ul>
                 <div id="myTabContent" class="tab-content">
                     <div class="tab-pane fade in active" id="service-one">
                         <section class="container product-info">
@@ -72,70 +84,66 @@
                     </div>
                     <div class="tab-pane fade" id="service-two">
                         <section class="container product-info">
-                            <table class="table">
-                                <tbody>
-                                    {% for attributeValue in product.attributeValues %}
-                                        <tr>
-                                            <td>
-                                                <a href="{#{ path('payment_attribute_show', { id: attributeValue.attribute.id }) }#}">
-                                                    {{ attributeValue.attribute.name }}
-                                                </a>
-                                            </td>
-                                            <td>
-                                                {% if attributeValue.image %}
-                                                    <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.image.path)  }}" />
-                                                {% elseif attributeValue.attribute.image %}
-                                                    <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.attribute.image.path) }}" />
-                                                {% endif %}
+                            {% if product.attributeValues | length > 0%}
+                                <table class="table borderless">
+                                    <tbody>
+                                        {% for attributeValue in product.attributeValues %}
+                                            <tr>
+                                                <td>
+                                                    <a href="{#{ path('payment_attribute_show', { id: attributeValue.attribute.id }) }#}">
+                                                        {{ attributeValue.attribute.name }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {% if attributeValue.image %}
+                                                        <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.image.path)  }}" />
+                                                    {% elseif attributeValue.attribute.image %}
+                                                        <img width="100" src="{{ asset('/uploads/images/' ~ attributeValue.attribute.image.path) }}" />
+                                                    {% endif %}
 
-                                                <a href="{#{ path('payment_attributevalue_show', { attributeId: attributeValue.attribute.id, id: attributeValue.id }) }#}">
-                                                    {{ attributeValue.name }}
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% else %}
-                                        <tr>
-                                            <td>
-                                                {{ 'attribute.empty' | trans  }}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                                    <a href="{#{ path('payment_attributevalue_show', { attributeId: attributeValue.attribute.id, id: attributeValue.id }) }#}">
+                                                        {{ attributeValue.name }}
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                {{ 'attribute.empty' | trans  }}
+                            {% endif %}
                         </section>
                     </div>
                     <div class="tab-pane fade" id="service-three">
                         <section class="container product-info">
-                            <table class="table">
-                                <tbody>
-                                {% for featureValue in product.featureValues %}
-                                    <tr>
-                                        <td>
-                                            <a href="{#{ path('payment_feature_show', { id: featureValue.feature.id }) }#}">
-                                                {{ featureValue.feature.name }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {% if featureValue.image %}
-                                                <img width="100" src="{{ asset('uploads/images/' ~ featureValue.image.path) }}" />
-                                            {% elseif featureValue.feature.image %}
-                                                <img width="100" src="{{ asset('uploads/images/' ~ featureValue.feature.image.path) }}" />
-                                            {% endif %}
+                            {% if product.featureValues | length > 0%} 
+                                <table class="table borderless">
+                                    <tbody>
+                                    {% for featureValue in product.featureValues %}
+                                        <tr>
+                                            <td>
+                                                <a href="{#{ path('payment_feature_show', { id: featureValue.feature.id }) }#}">
+                                                    {{ featureValue.feature.name }}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {% if featureValue.image %}
+                                                    <img width="100" src="{{ asset('uploads/images/' ~ featureValue.image.path) }}" />
+                                                {% elseif featureValue.feature.image %}
+                                                    <img width="100" src="{{ asset('uploads/images/' ~ featureValue.feature.image.path) }}" />
+                                                {% endif %}
 
-                                            <a href="{#{ path('payment_featurevalue_show', { featureId: featureValue.feature.id, id: featureValue.id }) }#}">
-                                                {{ featureValue.name }}
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% else %}
-                                    <tr>
-                                        <td>
-                                            {{ 'feature.empty' | trans  }}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
+                                                <a href="{#{ path('payment_featurevalue_show', { featureId: featureValue.feature.id, id: featureValue.id }) }#}">
+                                                    {{ featureValue.name }}
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                {{ 'feature.empty' | trans  }}
+                            {% endif %}
                         </section>
                     </div>
                     <div class="tab-pane fade" id="service-four">
@@ -146,11 +154,10 @@
                         </section>
                     </div>
                 </div>
-                <hr>
-                </div>
             </div>
-        {% endif %}
-    </div>
+        </div>
+    {% endif %}
+   
 </div>
 {% endblock %}
 
@@ -158,8 +165,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets
-            'bundles/payment/less/product-show-snipet.less'
-            'bundles/payment/less/step-snipet.less'
+            'bundles/payment/less/checkout.less'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}

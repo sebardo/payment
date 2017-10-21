@@ -112,7 +112,23 @@ trait ProductTrait
      * @var Dinamyc
      */
     private $relatedProducts;
+    
+    /**
+     * @var Dinamyc
+     */
+    private $ticket;
      
+    
+    static function PRICE_TYPE_FIXED()
+    {
+        return 0;
+    }
+    
+    static function PRICE_TYPE_PERCENT()
+    {
+        return 1;
+    }
+    
     /**
      * Add purchase
      *
@@ -519,13 +535,19 @@ trait ProductTrait
         return $this->relatedProducts;
     }
     
-    static function PRICE_TYPE_FIXED()
+    /**
+     * @return Ticket
+     */
+    public function getTicket()
     {
-        return 0;
+        return $this->ticket;
     }
-    
-    static function PRICE_TYPE_PERCENT()
+
+    /**
+     * @param Ticket $ticket
+     */
+    public function setTicket($ticket)
     {
-        return 1;
+        $this->ticket = $ticket;
     }
 }
