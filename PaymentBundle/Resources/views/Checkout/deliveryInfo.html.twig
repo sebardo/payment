@@ -14,44 +14,61 @@
 
 {% block  content %}
  <div class="container container-padding delivery">
-    {% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'delivery'}  %}
+    {#% include 'PaymentBundle:Checkout:steps.html.twig' with {'step': 'delivery'}  %#}
 
     <div class="col-md-12 col-xs-12 container-content">
         <!--content-->
         <div class="cart">
             <form name="delivery" id="delivery-form" method="post" action="{{ path('payment_checkout_deliveryinfo') }}">
                 {{ form_errors(form) }}
-                <div>
-                    <h3>{{ "account.user.profile" | trans }}</h3>
-                    <div class="row">
-                        <div class="col-sm-12" >
-                            <div class="row" >
-                                <div class="col-sm-4" >
-                                    {{ form_row(form.fullName, { 'attr': {'class': 'form-control'}, 'label': 'account.full.name' | trans }  ) }}
+                <div  class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>{{ "profile.singular" | trans }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-4" >
+                                        {{ form_row(form.fullName, { 'attr': {'class': 'form-control'}, 'label': 'profile.name' | trans }  ) }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h3>{{ "account.billing.info" | trans }}</h3>
-                    <div class="row">
-                        <div class="col-sm-12" >
-                             {{ include('PaymentBundle:Checkout:addresses/_billing_form.html.twig') }}
-                        </div>
-                    </div>    
-                </div>  
-                <div>
-                    <h3>{{ "account.delivery.info" | trans }}</h3>
-                    <div class="row">
-                        <div class="col-sm-12" >
-                            <div class="row">
-                                <div class="col-sm-12" >
-                                    {{ form_row(form.selectDelivery) }}
-                                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-xs-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>{{ "profile.billing.title" | trans }}</h4> 
+                            </div> 
+                             <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12" >
+                                         {{ include('PaymentBundle:Checkout:addresses/_billing_form.html.twig') }}
+                                    </div>
+                                </div>  
                             </div> 
                         </div>
-                    </div>    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" >
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4>{{ "profile.delivery.info" | trans }}</h4>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-sm-12" >
+                                        {{ form_row(form.selectDelivery) }}
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>    
 
                     {% if form.existingDeliveryAddress is defined %}
                         <div class="row {{ not app.session.has('existing-delivery-address') ? "hidden" }}" id="existing-delivery-address">
@@ -73,7 +90,7 @@
                             <div class="row" >
                                 <div class="col-sm-12" >  
                                     <div class="form-group">
-                                        <div class="observation-message">{{ "transaction.observations.message" | trans }}</div>
+                                        <div class="observation-message">{{ "checkout.observations.message" | trans }}</div>
                                         {{ form_widget(form.notes, {'attr': {'class': 'delivery-observations col-xs-12'} }) }}
                                     </div>
                                 </div>
@@ -83,7 +100,7 @@
                 </div>
                 <div class="submit-delivery">
 
-                        <button type="submit" class="btn btn-primary btn-lg btn-flat">{{ "pager.next" | trans }}</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-flat">{{ "checkout.continue" | trans }}</button>
 
                 </div>
                 {{ form_rest(form) }}
@@ -98,7 +115,7 @@
 {% block stylesheets %}
     {{ parent() }}
     {% stylesheets
-            'bundles/payment/less/step-snipet.less'
+            'bundles/payment/less/checkout.less'
     %}
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}

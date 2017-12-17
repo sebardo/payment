@@ -23,7 +23,7 @@
             {% endif %}
             <td>{{ include('PaymentBundle:Profile:Transaction/_status.html.twig', { transaction: transaction }) }}</td>
             <td>
-                {{transaction.paymentMethod.name}}
+                {% if transaction.paymentMethod.name is defined %}{{transaction.paymentMethod.name}}{%else%}-{%endif%}
             </td>
             <td>
                 {% if transaction.invoice.invoiceNumber is defined %}

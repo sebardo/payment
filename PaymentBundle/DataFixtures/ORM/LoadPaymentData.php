@@ -134,9 +134,8 @@ class LoadPaymentData extends SqlScriptFixture
                 <div class="price">
                     <span>{{ "checkout.amount" | trans }}:</span>
                     <strong style="margin-right: 15px;">{{ totals.amount | price }}</strong>
-                    <button >{{ "checkout.confirm" | trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ "checkout.confirm" | trans }}</button>
                 </div>
-                <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
             </div>');
 
             $pm1 = new PaymentMethod();
@@ -156,9 +155,8 @@ class LoadPaymentData extends SqlScriptFixture
                 <div class="price">
                     <span>{{ "checkout.amount" | trans }}:</span>
                     <strong style="margin-right: 15px;">{{ totals.amount | price }}</strong>
-                    <button >{{ "checkout.confirm" | trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ "checkout.confirm" | trans }}</button>
                 </div>
-                <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
             </div>');
 
             $pm2 = new PaymentMethod();
@@ -189,15 +187,14 @@ class LoadPaymentData extends SqlScriptFixture
                 <div class="price">
                     <span>{{ "checkout.amount" | trans }}:</span>
                     <strong style="margin-right: 15px;">{{ totals.amount | price }}</strong>
-                    <button >{{ "checkout.confirm" | trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ "checkout.confirm" | trans }}</button>
                 </div>
-                <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
             </div>');
 
             $pm4 = new PaymentMethod();
             $pm4->setName('Paypal Direct Payment');
             $psp4 = new PaymentServiceProvider();
-            $psp4->setActive(true);
+            $psp4->setActive(false);
             $psp4->setIsTestingAccount(true);
             $psp4->setRecurring(true);
             $psp4->setPaymentMethod($pm4);
@@ -214,9 +211,8 @@ class LoadPaymentData extends SqlScriptFixture
                 <div class="price">
                    <span>{{ "checkout.amount" | trans }}:</span>
                    <strong>{{ totals.amount | price }}</strong>
-                   <button >{{ "checkout.pay" | trans }}</button>
+                   <button class="btn btn-primary" type="submit">{{ "checkout.confirm" | trans }}</button>
                 </div>
-                <a href="{{ path(\'payment_checkout_deliveryinfo\') }}" class="btn btn-primary" title="{{ "back" | trans }}">{{ "back" | trans }}</a>
             </div>');
 
             $pm6 = new PaymentMethod();
@@ -239,14 +235,12 @@ class LoadPaymentData extends SqlScriptFixture
                     <div id="bt-dropin"></div>
                 </div>
 
-                <label for="amount">
-                    <span class="input-label">Amount</span>
-                    <div class="input-wrapper amount-wrapper">
-                        <input id="amount" name="braintree[amount]" type="tel" min="1" placeholder="Amount" value="10">
-                    </div>
-                </label>
-            </section>
-            <button class="btn btn-primary" type="submit"><span>Test Transaction</span></button>');
+                 <div class="price">
+                   <span>{{ "checkout.amount" | trans }}:</span>
+                   <strong>{{ totals.amount | price }}<input id="amount" name="braintree[amount]" type="hidden" min="1" placeholder="Amount" value="{{transaction.totalPrice}}"></strong>
+                   <button class="btn btn-primary" type="submit">{{ "checkout.confirm" | trans }}</button>
+                </div>
+            </section>');
 
             $transaction = new Transaction();
             $transaction->setTransactionKey(uniqid());

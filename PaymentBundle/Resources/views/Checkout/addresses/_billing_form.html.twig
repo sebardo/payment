@@ -1,47 +1,47 @@
 <div class="row">
     {% if form.contactPerson is defined %}
         <div class="col-sm-4">
-            {{ form_row(form.contactPerson, { label: 'account.contact.person' }) }}
+            {{ form_row(form.contactPerson, { label: 'profile.contact.person' }) }}
         </div>
     {% endif %}
 
     <div class="col-sm-4">
-        {{ form_row(form.dni, { label: 'account.passport'}) }}
+        {{ form_row(form.dni, { label: 'profile.passport'}) }}
     </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-8">
-        {{ form_row(form.address, { label: 'account.address.singular' }) }}
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-sm-4">
-        {{ form_row(form.city, { label: 'account.city' }) }}
-    </div>
-
-    <div class="col-sm-4">
-        {{ form_row(form.state, { label: 'account.province.singular' }) }}
-    </div>
-
-    <div class="col-sm-4">
-        {{ form_row(form.postalCode, { label: 'account.postal.code' }) }}
+    <div class="col-sm-6">
+        {{ form_row(form.address, { label: 'profile.address' }) }}
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm-4">
-        {{ form_row(form.phone, { label: 'account.phone.singular' }) }}
+        {{ form_row(form.city, { label: 'profile.city' }) }}
     </div>
 
     <div class="col-sm-4">
-        {{ form_row(form.phone2, { label: 'account.phone.second' }) }}
+        {{ form_row(form.state, { label: 'profile.state' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.postalCode, { label: 'profile.postal.code' }) }}
     </div>
 </div>
 
 <div class="row">
     <div class="col-sm-4">
-        {{ form_row(form.preferredSchedule, { label: 'account.chosen.schedule' }) }}
+        {{ form_row(form.phone, { label: 'profile.phone' }) }}
+    </div>
+
+    <div class="col-sm-4">
+        {{ form_row(form.phone2, { label: 'profile.phone.mobile' }) }}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        {{ form_row(form.preferredSchedule, { label: 'profile.chosen.schedule' }) }}
     </div>
 </div>

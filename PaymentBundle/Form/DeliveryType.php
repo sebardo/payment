@@ -43,11 +43,11 @@ class DeliveryType extends AbstractType
         $numDeliveryAddresses = $this->em->getRepository('PaymentBundle:Address')->countTotal($user->getId(), false);
 
         // initialize delivery addresses options
-        $selectDelivery['account.address.select.same'] = 'same';
+        $selectDelivery['profile.address.select.same'] = 'same';
         if ($numDeliveryAddresses > 0) {
-            $selectDelivery['account.address.select.existing'] = 'existing';
+            $selectDelivery['profile.address.select.existing'] = 'existing';
         }
-        $selectDelivery['account.address.select.new'] = 'new';
+        $selectDelivery['profile.address.select.new'] = 'new';
 
         $builder
             ->add('fullName', null, array(
