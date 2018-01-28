@@ -4,7 +4,7 @@
     "description": "Payment bundle",
     "keywords": ["payment", "ecommerce"],
     "homepage": "https://github.com/sebardo/payment",
-    "license": "GNU",
+    "license": "proprietary",
     "authors": [
         {
             "name": "Dario Sebastian Sasturain",
@@ -15,9 +15,9 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "sebardo/admin": "dev-master",
+        "sebardo/admin": "~0.1",
         "ensepar/html2pdf-bundle" : "~2.0",
-        "braintree/braintree_php": "*"
+        "braintree/braintree_php": "~3.27"
     },
     "autoload": {
         "psr-4": {"PaymentBundle\\": "PaymentBundle"}
